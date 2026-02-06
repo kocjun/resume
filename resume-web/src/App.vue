@@ -279,7 +279,7 @@ const handleSaveExperience = async (experienceData) => {
         <!-- Sidebar (Right) -->
         <aside class="hidden lg:block lg:col-span-4 space-y-4">
           <!-- About Community / Skills -->
-          <SkillSection :skills="data.skills" />
+          <SkillSection :skills="data.skills" :activeTag="searchTag" @select-tag="selectTag" />
 
           <!-- Personal Projects -->
           <PersonalProjectList v-if="data.personalProjects" :projects="data.personalProjects" />

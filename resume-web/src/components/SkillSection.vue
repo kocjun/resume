@@ -10,8 +10,14 @@ const props = defineProps({
   skills: {
     type: Array,
     required: true
+  },
+  activeTag: {
+    type: String,
+    default: ''
   }
 })
+
+const emit = defineEmits(['select-tag'])
 
 const getIcon = (category) => {
   if (category.includes('Backend')) return CommandLineIcon
@@ -49,7 +55,11 @@ const getGradientClass = (index) => {
          </div>
          <div class="flex flex-wrap gap-1.5">
            <span v-for="item in category.items" :key="item"
-                 class="px-2 py-1 bg-[#272729] hover:bg-[#343536] text-reddit-text text-xs rounded-full transition-colors cursor-pointer border border-transparent hover:border-reddit-border">
+                 @click="emit('select-tag', item)"
+                 class="px-2 py-1 text-xs rounded-full transition-colors cursor-pointer border"
+                 :class="activeTag.toLowerCase() === item.toLowerCase()
+                   ? 'bg-reddit-orange/20 text-reddit-orange border-reddit-orange/50'
+                   : 'bg-[#272729] hover:bg-[#343536] text-reddit-text border-transparent hover:border-reddit-border'">
              {{ item }}
            </span>
          </div>
