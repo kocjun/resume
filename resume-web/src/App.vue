@@ -53,8 +53,12 @@ const filteredExperiences = computed(() => {
   )
 })
 
-// 태그 선택
+// 태그 선택 (같은 태그 재클릭 시 해제)
 const selectTag = (tag) => {
+  if (searchTag.value.toLowerCase() === tag.toLowerCase()) {
+    clearSearch()
+    return
+  }
   searchTag.value = tag
   searchQuery.value = tag
   showTagSuggestions.value = false
