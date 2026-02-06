@@ -92,7 +92,12 @@ const loadResumeData = async () => {
   try {
     if (isAuthenticated.value) {
       // 로그인된 경우 API에서 데이터 가져오기
-      data.value = await resumeApi.get()
+      const apiData = await resumeApi.get()
+      // DB에 없는 필드는 fallback 데이터에서 보완
+      if (!apiData.personalProjects) {
+        apiData.personalProjects = resumeDataFallback.personalProjects
+      }
+      data.value = apiData
     } else {
       // 로그인 안 된 경우 정적 데이터 사용 (공개 모드)
       data.value = resumeDataFallback

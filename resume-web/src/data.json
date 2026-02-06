@@ -270,14 +270,24 @@
     ],
     "personalProjects": [
         {
-            "name": "Resume Web",
-            "description": "Vue 3와 Tailwind CSS를 활용한 반응형 이력서 웹사이트. Reddit 스타일의 UI/UX 적용.",
-            "link": "https://github.com/Start-to-End-AI/resume-web"
+            "name": "Resume",
+            "description": "Vue 3 + Tailwind CSS + Fastify + MongoDB 기반 개인 이력서 웹 애플리케이션. Reddit 스타일 UI/UX.",
+            "link": "https://github.com/kocjun/resume"
         },
         {
-            "name": "AI Orchestration Tool",
-            "description": "다양한 LLM 모델을 통합 관리하고 워크플로우를 자동화하는 오케스트레이션 도구 프로토타입.",
-            "link": "https://github.com/example/ai-orchestrator"
+            "name": "AI Stock",
+            "description": "Python 기반 AI 주식 분석 프로젝트.",
+            "link": "https://github.com/kocjun/ai-stock"
+        },
+        {
+            "name": "Learn Kafka",
+            "description": "Kafka, 이벤트 기반 MSA 백엔드, Docker 등 학습용 프로젝트.",
+            "link": "https://github.com/kocjun/learn-kafka"
+        },
+        {
+            "name": "Backend Java",
+            "description": "Java 백엔드 샘플 프로젝트.",
+            "link": "https://github.com/kocjun/backendJava"
         }
     ]
 }

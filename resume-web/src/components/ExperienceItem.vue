@@ -69,7 +69,8 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div ref="itemRef" 
+  <div ref="itemRef"
+       @click="$emit('click', experience)"
        class="flex bg-reddit-gray border border-reddit-border rounded-md overflow-hidden hover:border-reddit-text-secondary transition-colors cursor-pointer p-4 md:p-5"
        :class="[isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 transition-all duration-500']">
     
