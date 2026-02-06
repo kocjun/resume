@@ -143,20 +143,37 @@ const openEditModal = (experience) => {
 
 const handleSaveExperience = async (experienceData) => {
   try {
-    if (experienceData.id) {
-      // 수정
-      await resumeApi.updateExperience(experienceData.id, experienceData)
+    // id 또는 _id 로 수정 여부 판단
+    const expId = experienceData.id || experienceData._id
+    if (expId) {
+      // payload에서 id/_id 제거 (URL 파라미터로 전달)
+      const { id, _id, ...payload } = experienceData
+      await resumeApi.updateExperience(expId, payload)
     } else {
-      // 생성
       await resumeApi.addExperience(experienceData)
     }
-    
+
     // 데이터 갱신
     await loadResumeData()
     showFormModal.value = false
   } catch (err) {
     console.error('Failed to save experience:', err)
     alert('Failed to save experience: ' + err.message)
+  }
+}
+
+const handleDeleteExperience = async (experience) => {
+  const expId = experience.id || experience._id
+  if (!expId) return
+
+  if (!confirm(`"${experience.project}" 포스트를 삭제하시겠습니까?`)) return
+
+  try {
+    await resumeApi.deleteExperience(expId)
+    await loadResumeData()
+  } catch (err) {
+    console.error('Failed to delete experience:', err)
+    alert('Failed to delete experience: ' + err.message)
   }
 }
 </script>
@@ -273,6 +290,7 @@ const handleSaveExperience = async (experienceData) => {
             :isAuthenticated="isAuthenticated"
             @create="openCreateModal"
             @edit="openEditModal"
+            @delete="handleDeleteExperience"
           />
         </main>
 

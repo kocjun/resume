@@ -50,6 +50,17 @@ export async function getResume(request, reply) {
     delete resume._id;
     delete resume.__v;
 
+    // experience 하위 항목의 _id도 id로 변환
+    if (resume.experience) {
+      resume.experience = resume.experience.map(exp => {
+        if (exp._id) {
+          exp.id = exp._id.toString();
+          delete exp._id;
+        }
+        return exp;
+      });
+    }
+
     return reply.code(200).send(resume);
   } catch (error) {
     request.log.error(error);

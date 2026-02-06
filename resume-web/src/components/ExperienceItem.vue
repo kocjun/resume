@@ -1,11 +1,10 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
 import {
-  ChatBubbleLeftIcon,
-  ArrowUpIcon,
-  ArrowDownIcon,
-  ShareIcon,
-  PencilSquareIcon
+  ClipboardDocumentIcon,
+  ClipboardDocumentCheckIcon,
+  PencilSquareIcon,
+  TrashIcon
 } from '@heroicons/vue/24/outline'
 
 const props = defineProps({
@@ -23,10 +22,31 @@ const props = defineProps({
   }
 })
 
-defineEmits(['click', 'edit'])
+defineEmits(['click', 'edit', 'delete'])
 
 const itemRef = ref(null)
 const isVisible = ref(false)
+const copied = ref(false)
+
+const copyToClipboard = async () => {
+  const exp = props.experience
+  const text = [
+    `[${exp.company}] ${exp.project}`,
+    exp.position ? `${exp.position} | ${exp.period}` : exp.period,
+    '',
+    exp.description,
+    '',
+    `Tech: ${exp.techStack?.join(', ') || ''}`,
+  ].join('\n')
+
+  try {
+    await navigator.clipboard.writeText(text)
+    copied.value = true
+    setTimeout(() => { copied.value = false }, 2000)
+  } catch {
+    // fallback
+  }
+}
 
 let observer = null
 
@@ -67,17 +87,28 @@ onUnmounted(() => {
           
           <!-- Action Buttons -->
           <div class="flex items-center ml-auto">
-            <div class="flex items-center gap-1 hover:bg-[#272729] px-2 py-1 rounded text-reddit-text-secondary hover:text-reddit-text transition-colors">
-              <ShareIcon class="w-5 h-5" />
-              <span class="text-xs font-bold">Share</span>
-            </div>
+            <button @click.stop="copyToClipboard"
+                    class="flex items-center gap-1 hover:bg-[#272729] px-2 py-1 rounded transition-colors"
+                    :class="copied ? 'text-green-400' : 'text-reddit-text-secondary hover:text-reddit-text'">
+              <ClipboardDocumentCheckIcon v-if="copied" class="w-5 h-5" />
+              <ClipboardDocumentIcon v-else class="w-5 h-5" />
+              <span class="text-xs font-bold">{{ copied ? 'Copied!' : 'Copy' }}</span>
+            </button>
             
             <!-- Edit Button (Only visible when authenticated) -->
-            <button v-if="isAuthenticated" 
+            <button v-if="isAuthenticated"
                     @click.stop="$emit('edit', experience)"
                     class="flex items-center gap-1 hover:bg-[#272729] px-2 py-1 rounded text-reddit-text-secondary hover:text-reddit-text transition-colors">
               <PencilSquareIcon class="w-5 h-5" />
               <span class="text-xs font-bold">Edit</span>
+            </button>
+
+            <!-- Delete Button (Only visible when authenticated) -->
+            <button v-if="isAuthenticated"
+                    @click.stop="$emit('delete', experience)"
+                    class="flex items-center gap-1 hover:bg-[#272729] px-2 py-1 rounded text-reddit-text-secondary hover:text-red-400 transition-colors">
+              <TrashIcon class="w-5 h-5" />
+              <span class="text-xs font-bold">Delete</span>
             </button>
           </div>
        </div>

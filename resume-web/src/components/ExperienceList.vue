@@ -14,7 +14,7 @@ defineProps({
   }
 })
 
-defineEmits(['create', 'edit'])
+defineEmits(['create', 'edit', 'delete'])
 
 const selectedExperience = ref(null)
 const isModalOpen = ref(false)
@@ -66,6 +66,7 @@ const closeModal = () => {
         :isAuthenticated="isAuthenticated"
         @click="openModal(exp)"
         @edit="$emit('edit', $event)"
+        @delete="$emit('delete', $event)"
       />
     </div>
 
