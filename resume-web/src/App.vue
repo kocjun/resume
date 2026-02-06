@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { resumeApi, authApi } from './api/client.js'
 import resumeDataFallback from './data.json'
 import ProfileHeader from './components/ProfileHeader.vue'
@@ -17,6 +17,68 @@ const isAuthenticated = ref(false)
 const showLoginModal = ref(false)
 const showFormModal = ref(false)
 const editingExperience = ref(null)
+const searchQuery = ref('')
+const searchTag = ref('')
+const showTagSuggestions = ref(false)
+
+// 모든 태그 목록 (techStack + skills.items 중복 제거)
+const allTags = computed(() => {
+  if (!data.value) return []
+  const tagSet = new Set()
+  // experience의 techStack에서 수집
+  data.value.experience?.forEach(exp => {
+    exp.techStack?.forEach(tag => tagSet.add(tag))
+  })
+  // skills의 items에서 수집
+  data.value.skills?.forEach(skill => {
+    skill.items?.forEach(item => tagSet.add(item))
+  })
+  return [...tagSet].sort()
+})
+
+// 입력값에 매칭되는 태그 목록
+const filteredTags = computed(() => {
+  if (!searchQuery.value) return allTags.value
+  const q = searchQuery.value.toLowerCase()
+  return allTags.value.filter(tag => tag.toLowerCase().includes(q))
+})
+
+// 태그로 필터링된 experience 목록
+const filteredExperiences = computed(() => {
+  if (!data.value?.experience) return []
+  if (!searchTag.value) return data.value.experience
+  const tag = searchTag.value.toLowerCase()
+  return data.value.experience.filter(exp =>
+    exp.techStack?.some(t => t.toLowerCase() === tag)
+  )
+})
+
+// 태그 선택
+const selectTag = (tag) => {
+  searchTag.value = tag
+  searchQuery.value = tag
+  showTagSuggestions.value = false
+}
+
+// 검색 초기화
+const clearSearch = () => {
+  searchTag.value = ''
+  searchQuery.value = ''
+  showTagSuggestions.value = false
+}
+
+// 검색 입력 핸들러
+const onSearchInput = () => {
+  searchTag.value = ''
+  showTagSuggestions.value = searchQuery.value.length > 0
+}
+
+// 검색바 외부 클릭 시 드롭다운 닫기
+const onSearchBlur = () => {
+  setTimeout(() => {
+    showTagSuggestions.value = false
+  }, 200)
+}
 
 // 데이터 로드 함수
 const loadResumeData = async () => {
@@ -112,13 +174,49 @@ const handleSaveExperience = async (experienceData) => {
          <span class="font-display font-bold text-lg hidden sm:block">resume/{{ data?.profile?.name || 'Loading...' }}</span>
        </div>
        
-       <!-- Search Bar Mockup -->
-       <div class="flex-1 max-w-xl mx-4 hidden md:block">
-         <div class="bg-[#272729] border border-reddit-border rounded-full px-4 py-1.5 flex items-center hover:border-white transition-colors cursor-pointer">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-reddit-text-secondary mr-3">
+       <!-- Search Tag Bar -->
+       <div class="flex-1 max-w-xl mx-4 hidden md:block relative">
+         <div class="bg-[#272729] border border-reddit-border rounded-full px-4 py-1.5 flex items-center hover:border-white transition-colors"
+              :class="{ 'border-white': showTagSuggestions }">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-reddit-text-secondary mr-3 flex-shrink-0">
               <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
             </svg>
-            <span class="text-reddit-text-secondary text-sm">Search Resume</span>
+            <input
+              v-model="searchQuery"
+              @input="onSearchInput"
+              @focus="showTagSuggestions = searchQuery.length > 0 || !searchTag"
+              @blur="onSearchBlur"
+              type="text"
+              placeholder="Search Tag"
+              class="bg-transparent text-sm text-reddit-text placeholder-reddit-text-secondary outline-none flex-1 min-w-0"
+            />
+            <button
+              v-if="searchTag || searchQuery"
+              @click="clearSearch"
+              class="ml-2 text-reddit-text-secondary hover:text-white transition-colors flex-shrink-0">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+              </svg>
+            </button>
+         </div>
+         <!-- Tag Suggestions Dropdown -->
+         <div v-if="showTagSuggestions && filteredTags.length > 0"
+              class="absolute top-full left-0 right-0 mt-1 bg-[#1a1a1b] border border-reddit-border rounded-md shadow-lg max-h-60 overflow-y-auto z-50">
+           <button
+             v-for="tag in filteredTags"
+             :key="tag"
+             @mousedown.prevent="selectTag(tag)"
+             class="w-full text-left px-4 py-2 text-sm text-reddit-text hover:bg-[#272729] transition-colors flex items-center gap-2">
+             <span class="inline-block bg-reddit-orange/20 text-reddit-orange text-xs px-2 py-0.5 rounded-full">#</span>
+             {{ tag }}
+           </button>
+         </div>
+         <!-- Active Tag Badge -->
+         <div v-if="searchTag" class="absolute -bottom-6 left-4 flex items-center gap-2 text-xs">
+           <span class="bg-reddit-orange/20 text-reddit-orange px-2 py-0.5 rounded-full flex items-center gap-1">
+             #{{ searchTag }}
+             <span class="text-reddit-text-secondary ml-1">{{ filteredExperiences.length }}건</span>
+           </span>
          </div>
        </div>
 
@@ -170,8 +268,8 @@ const handleSaveExperience = async (experienceData) => {
           <ProfileHeader :profile="data.profile" class="mb-6 rounded-none md:rounded-md overflow-hidden" />
 
           <!-- Experience List (Feed) -->
-          <ExperienceList 
-            :experiences="data.experience" 
+          <ExperienceList
+            :experiences="filteredExperiences"
             :isAuthenticated="isAuthenticated"
             @create="openCreateModal"
             @edit="openEditModal"

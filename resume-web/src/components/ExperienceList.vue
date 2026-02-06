@@ -49,10 +49,18 @@ const closeModal = () => {
       </div>
     </div>
 
-    <div class="space-y-4">
-      <ExperienceItem 
-        v-for="(exp, index) in experiences" 
-        :key="exp.id" 
+    <div v-if="experiences.length === 0" class="bg-reddit-gray border border-reddit-border rounded-md p-8 text-center">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 mx-auto text-reddit-text-secondary mb-3">
+        <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+      </svg>
+      <p class="text-reddit-text-secondary text-sm">검색 결과가 없습니다.</p>
+      <p class="text-reddit-text-secondary/60 text-xs mt-1">다른 태그로 검색해 보세요.</p>
+    </div>
+
+    <div v-else class="space-y-4">
+      <ExperienceItem
+        v-for="(exp, index) in experiences"
+        :key="exp.id"
         :experience="exp"
         :index="index"
         :isAuthenticated="isAuthenticated"
