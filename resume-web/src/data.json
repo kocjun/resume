@@ -1,0 +1,283 @@
+{
+    "profile": {
+        "name": "전영창",
+        "role": "15+ Years Full Stack Developer",
+        "email": "Yeongchang.jeon@gmail.com",
+        "phone": "010-****-****",
+        "address": "경기도 화성시",
+        "summary": "15년 이상 Java/Spring 기반 백엔드 시스템 개발 및 SI 프로젝트를 수행한 풀스택 개발자입니다. 삼성전자, 세메스, 질병관리청 등 대규모 시스템의 설계부터 개발, 운영까지 전 과정에 참여하며 안정적인 서비스를 구축했습니다. \n\nSpring Boot, Vue.js, JPA 등 최신 기술을 적극적으로 도입하여 개발 생산성을 향상시키고, 복잡한 비즈니스 요구사항을 해결하는 데 강점이 있습니다. 새로운 기술 습득을 즐기며, 동료들과의 소통과 협업을 중요하게 생각합니다."
+    },
+    "skills": [
+        {
+            "category": "Backend",
+            "items": [
+                "Java",
+                "Spring Boot",
+                "Spring Framework",
+                "JPA/Hibernate",
+                "Node.js",
+                "PHP",
+                "C++"
+            ]
+        },
+        {
+            "category": "Frontend",
+            "items": [
+                "Vue.js",
+                "React",
+                "Angular",
+                "JavaScript (ES6+)",
+                "TypeScript",
+                "Thymeleaf",
+                "Nexacro",
+                "D3.js"
+            ]
+        },
+        {
+            "category": "Database",
+            "items": [
+                "Oracle",
+                "MySQL",
+                "MSSQL"
+            ]
+        },
+        {
+            "category": "DevOps & Tools",
+            "items": [
+                "Git",
+                "Docker",
+                "Jenkins",
+                "AWS",
+                "Linux",
+                "IntelliJ",
+                "VS Code"
+            ]
+        }
+    ],
+    "experience": [
+        {
+            "id": 1,
+            "company": "광명S&S",
+            "period": "2025.10 ~ 2026.01",
+            "position": "차장 / 프리랜서",
+            "project": "SK인텔릭스 SCM 대시보드 개발",
+            "description": "SK 인텔릭스 공급망 관리(SCM) 대시보드 시스템 구축 프로젝트입니다.\n- Tableau를 활용한 데이터 시각화 및 대시보드 개발\n- Spring Boot 기반의 백엔드 API 연동 및 Oracle DB 쿼리 최적화",
+            "techStack": [
+                "Java",
+                "Spring Boot",
+                "Oracle",
+                "Tableau"
+            ]
+        },
+        {
+            "id": 2,
+            "company": "가치정보기술",
+            "period": "2025.07 ~ 2025.09",
+            "position": "차장 / 프리랜서",
+            "project": "KT 가치제안서 유지보수",
+            "description": "KT 대리점 유무선 상품 설계를 위한 가치제안 시스템 유지보수 업무를 수행했습니다.\n- 웹소켓 기반 실시간 데이터 동기화 구현 (대리점 시스템 연동)\n- 클라우드 환경에서의 서비스 안정화 및 기능 개선",
+            "techStack": [
+                "Java",
+                "WebSocket",
+                "Cloud",
+                "Oracle"
+            ]
+        },
+        {
+            "id": 3,
+            "company": "누리어시스템",
+            "period": "2024.12 ~ 2025.06",
+            "position": "차장 / 프리랜서",
+            "project": "삼성전자DS CP 대외협력포털 SI 개발",
+            "description": "삼성전자 DS부문의 대외 협력사를 위한 DSCP 포털 시스템을 개발했습니다.\n- 공통 파트 설계 및 구현 (메뉴, 권한, 공통코드, 통계 등)\n- MS Teams 라이선스 및 정책 관리 기능 연동\n- DS 일정관리/파일관리 시스템 인터페이스 개발\n- Java Spring Boot (DWP) 백엔드 및 Vue.js 프론트엔드 개발",
+            "techStack": [
+                "Java",
+                "Spring Boot",
+                "Vue.js",
+                "MSSQL"
+            ]
+        },
+        {
+            "id": 4,
+            "company": "엔솔루션스",
+            "period": "2024.04 ~ 2024.10",
+            "position": "차장 / 프리랜서",
+            "project": "세메스 CSS시스템 SI 개발",
+            "description": "반도체 장비 전문 기업 세메스의 CSS(Customer Support System) 웹 시스템을 개발했습니다.\n- 설비 CS 접수, 수리 요청, 정산, 청구 등 핵심 업무 프로세스 구현\n- Java X-UP 프레임워크 기반 백엔드 및 넥사크로 UI 개발",
+            "techStack": [
+                "Java",
+                "Nexacro",
+                "Oracle"
+            ]
+        },
+        {
+            "id": 5,
+            "company": "디어소프트",
+            "period": "2023.01 ~ 2023.09",
+            "position": "차장 / 프리랜서",
+            "project": "질병관리청 방역통합시스템 SI 개발",
+            "description": "국가 방역 데이터 통합 관리를 위한 웹 시스템 구축 프로젝트에 참여했습니다.\n- 역학조사 파트 설계 및 Java 백엔드 개발\n- 대용량 데이터 처리를 위한 Oracle 쿼리 작성 및 최적화\n- JSP 기반 프론트엔드 화면 구현",
+            "techStack": [
+                "Java",
+                "JSP",
+                "Oracle"
+            ]
+        },
+        {
+            "id": 6,
+            "company": "넷믹스",
+            "period": "2022.04 ~ 2022.12",
+            "position": "차장 / 프리랜서",
+            "project": "세메스 품질관리시스템 SI 개발",
+            "description": "세메스 품질관리시스템(QMS)의 수입 및 출하 관리 모듈을 개발했습니다.\n- Java X-UP 기반 백엔드 비즈니스 로직 구현\n- 넥사크로 툴을 활용한 사용자 친화적 UI/UX 개발",
+            "techStack": [
+                "Java",
+                "Nexacro",
+                "Oracle"
+            ]
+        },
+        {
+            "id": 7,
+            "company": "오픈에스지",
+            "period": "2020.08 ~ 2022.03",
+            "position": "차장 / 프리랜서",
+            "project": "삼성전자DS 스마트인터락 SI 개발",
+            "description": "삼성전자 DS 8대 공정 라인에서 발생하는 설비 인터락(멈춤) 정보를 시각화하고 제어하는 웹 서비스를 개발했습니다.\n- 실시간 데이터 처리를 위한 JSON API 설계 및 구현\n- Spring Framework 기반 웹 서버 구성 및 Oracle DB 연동",
+            "techStack": [
+                "Java",
+                "Spring Framework",
+                "JavaScript",
+                "Oracle"
+            ]
+        },
+        {
+            "id": 8,
+            "company": "시큐레이어",
+            "period": "2019.03 ~ 2020.05",
+            "position": "차장",
+            "project": "보안 관제 처리 웹 개발",
+            "description": "통일부 및 감사원 보안 관제 실황판 대시보드 구축 및 국가정보관리원 보안 솔루션을 유지보수했습니다.\n- 기존 솔루션에 Vue.js를 선행 도입하여 컴포넌트 기반 프론트엔드 구조화\n- Vuex 상태 관리 및 Router 적용으로 UX 개선\n- GitHub/Trello 도입으로 형상 관리 및 협업 프로세스 개선",
+            "techStack": [
+                "Java",
+                "Vue.js",
+                "Spring Framework",
+                "MySQL"
+            ]
+        },
+        {
+            "id": 9,
+            "company": "에버원소프트",
+            "period": "2018.07 ~ 2019.02",
+            "position": "차장 / 프리랜서",
+            "project": "엔지니어 포털 SI 개발",
+            "description": "삼성 디스플레이(OLED) 엔지니어 부서를 위한 불량 정보 계측 및 차트 시각화 웹 애플리케이션을 개발했습니다.\n- Angular 6를 활용한 인터랙티브 프론트엔드 개발\n- Spring Framework 기반 백엔드 및 JSON 데이터 통신 구현",
+            "techStack": [
+                "Java",
+                "Angular",
+                "Spring Framework"
+            ]
+        },
+        {
+            "id": 10,
+            "company": "아그릭스",
+            "period": "2016.02 ~ 2017.12",
+            "position": "과장",
+            "project": "쇼핑몰 웹 개발 & 운영",
+            "description": "농자재 전문 쇼핑몰의 기획, 설계, 개발 및 운영 전반을 담당했습니다.\n- 개발 기간 단축을 위해 Spring Boot, JPA, Thymeleaf 등 최신 기술 스택 도입\n- 효율적인 DB 설계 및 클래스 구조화 리딩",
+            "techStack": [
+                "Java",
+                "Spring Boot",
+                "JPA",
+                "Thymeleaf"
+            ]
+        },
+        {
+            "id": 11,
+            "company": "시스트란인터네셔널",
+            "period": "2015.01 ~ 2016.01",
+            "position": "과장",
+            "project": "기계번역 솔루션 개발",
+            "description": "기계번역 솔루션 유지보수 및 포스코 연구 과제 개발에 참여했습니다.\n- D3.js 라이브러리를 활용하여 특허 침해 판단 결과를 시각적으로 표현하는 웹 애플리케이션 개발",
+            "techStack": [
+                "Java",
+                "Spring Framework",
+                "D3.js"
+            ]
+        },
+        {
+            "id": 12,
+            "company": "브리지텍",
+            "period": "2013.05 ~ 2014.10",
+            "position": "대리",
+            "project": "콜센터 솔루션 개발",
+            "description": "자사 콜센터 제품군을 통합 관리하는 웹 솔루션을 개발했습니다.\n- 전자정부 프레임워크 기반 웹 서버 구축\n- C++ 교환기/녹취 서버와 소켓/API 통신 연동 모듈 개발",
+            "techStack": [
+                "Java",
+                "Spring Framework",
+                "C++",
+                "eGovFramework"
+            ]
+        },
+        {
+            "id": 13,
+            "company": "카이런소프트",
+            "period": "2011.05 ~ 2013.02",
+            "position": "대리",
+            "project": "SI 웹 개발 & GUI",
+            "description": "KISTI 슈퍼컴퓨팅 머신 제어 GUI 및 홈네트워크 표준화 서버를 개발했습니다.\n- Linux C++ 서버 개발 및 Java RCP 기반 데스크탑 애플리케이션 개발\n- Spring Framework 기반 웹 서비스 구현",
+            "techStack": [
+                "Java",
+                "Spring Framework",
+                "C++",
+                "Java RCP"
+            ]
+        },
+        {
+            "id": 14,
+            "company": "클루닉스",
+            "period": "2009.10 ~ 2011.04",
+            "position": "연구원",
+            "project": "클라우드 시스템 웹 GUI 개발",
+            "description": "클라우드 컴퓨팅 머신 제어 및 상태 모니터링을 위한 웹 GUI를 개발했습니다.\n- C언어 기반 시스템 데몬 프로그램 개발\n- PHP 웹 관리 인터페이스 구현",
+            "techStack": [
+                "C",
+                "PHP",
+                "Linux"
+            ]
+        }
+    ],
+    "education": [
+        {
+            "school": "충남대학교",
+            "major": "컴퓨터공학과",
+            "period": "2009년 02월 졸업"
+        },
+        {
+            "school": "보문고등학교",
+            "major": "이과",
+            "period": "2001년 02월 졸업"
+        }
+    ],
+    "certifications": [
+        {
+            "name": "정보처리기사",
+            "date": "2011.09"
+        },
+        {
+            "name": "SCJP",
+            "date": "2007.07"
+        }
+    ],
+    "personalProjects": [
+        {
+            "name": "Resume Web",
+            "description": "Vue 3와 Tailwind CSS를 활용한 반응형 이력서 웹사이트. Reddit 스타일의 UI/UX 적용.",
+            "link": "https://github.com/Start-to-End-AI/resume-web"
+        },
+        {
+            "name": "AI Orchestration Tool",
+            "description": "다양한 LLM 모델을 통합 관리하고 워크플로우를 자동화하는 오케스트레이션 도구 프로토타입.",
+            "link": "https://github.com/example/ai-orchestrator"
+        }
+    ]
+}

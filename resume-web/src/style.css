@@ -1,0 +1,60 @@
+@import "tailwindcss";
+
+@theme {
+    --font-sans: "Noto Sans KR", sans-serif;
+    --font-display: "Poppins", sans-serif;
+
+    --color-reddit-dark: #030303;
+    --color-reddit-gray: #1A1A1B;
+    --color-reddit-border: #343536;
+    --color-reddit-text: #D7DADC;
+    --color-reddit-text-secondary: #818384;
+    --color-reddit-orange: #FF4500;
+    --color-reddit-blue: #4FBCFF;
+}
+
+@layer utilities {
+    .animate-gradient {
+        background-size: 200% 200%;
+        animation: gradient-flow 6s ease infinite;
+    }
+
+    .animate-fade-in-up {
+        animation: fade-in-up 0.8s ease-out forwards;
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    .delay-100 {
+        animation-delay: 100ms;
+    }
+
+    .delay-200 {
+        animation-delay: 200ms;
+    }
+
+    .delay-300 {
+        animation-delay: 300ms;
+    }
+}
+
+@keyframes gradient-flow {
+    0% {
+        background-position: 0% 50%
+    }
+
+    50% {
+        background-position: 100% 50%
+    }
+
+    100% {
+        background-position: 0% 50%
+    }
+}
+
+@keyframes fade-in-up {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}

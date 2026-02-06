@@ -1,0 +1,55 @@
+# Docker Compose 설정 파일
+# Resume Backend API를 위한 MongoDB 컨테이너 설정
+version: '3.8'
+
+services:
+  mongodb:
+    # MongoDB 7.0 공식 이미지 사용
+    image: mongo:7.0
+
+    # 컨테이너 이름 지정 (명시적으로 관리하기 위함)
+    container_name: resume-mongodb
+
+    # 컨테이너 자동 재시작 정책 (시스템 재부팅 시에도 자동 시작)
+    restart: unless-stopped
+
+    # 포트 매핑: 호스트:컨테이너
+    ports:
+      - "27017:27017"
+
+    # MongoDB 환경 변수
+    environment:
+      # 초기 데이터베이스 이름 설정
+      MONGO_INITDB_DATABASE: resume-db
+
+    # 데이터 영구 저장을 위한 볼륨 마운트
+    volumes:
+      # MongoDB 데이터 저장소 (컬렉션, 문서 등)
+      - mongodb_data:/data/db
+      # MongoDB 설정 파일 저장소
+      - mongodb_config:/data/configdb
+
+    # 네트워크 설정
+    networks:
+      - resume-network
+
+    # 헬스 체크: MongoDB가 정상 작동하는지 10초마다 확인
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+# 영구 볼륨 정의
+# 컨테이너가 삭제되어도 데이터는 유지됨
+volumes:
+  mongodb_data:
+    driver: local
+  mongodb_config:
+    driver: local
+
+# 네트워크 정의
+# 향후 백엔드 서비스를 추가할 경우 같은 네트워크로 연결 가능
+networks:
+  resume-network:
+    driver: bridge

@@ -1,0 +1,140 @@
+# ===========================
+# Resume Project .gitignore
+# ===========================
+
+# --------------------------
+# Dependencies
+# --------------------------
+node_modules/
+**/node_modules/
+
+# --------------------------
+# Build outputs
+# --------------------------
+resume-web/dist/
+resume-backend/dist/
+resume-backend/build/
+*.tsbuildinfo
+
+# --------------------------
+# Environment files (SENSITIVE)
+# --------------------------
+.env
+.env.local
+.env.*.local
+.env.production
+.env.development
+.env.staging
+# Keep example files
+!.env.example
+!resume-backend/.env.example
+
+# --------------------------
+# SSL/TLS Certificates (SENSITIVE)
+# --------------------------
+nginx/ssl/*.key
+nginx/ssl/*.crt
+nginx/ssl/*.pem
+certbot/
+*.p12
+*.pfx
+
+# --------------------------
+# Backups (SENSITIVE DATA)
+# --------------------------
+backups/
+*.archive
+*.dump
+*.bak
+
+# --------------------------
+# Seed Data (PERSONAL INFO)
+# --------------------------
+scripts/seed-data/*.json
+!scripts/seed-data/*.example.json
+
+# --------------------------
+# Logs
+# --------------------------
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# --------------------------
+# Testing & Coverage
+# --------------------------
+coverage/
+.nyc_output/
+*.lcov
+.jest/
+
+# --------------------------
+# OS generated files
+# --------------------------
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+desktop.ini
+
+# --------------------------
+# IDE & Editors
+# --------------------------
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json.example
+*.swp
+*.swo
+*.swn
+*~
+*.sublime-project
+*.sublime-workspace
+*.code-workspace
+
+# --------------------------
+# Docker
+# --------------------------
+.docker/
+
+# --------------------------
+# MongoDB data (local)
+# --------------------------
+data/
+mongodb_data/
+
+# --------------------------
+# Temporary files
+# --------------------------
+tmp/
+temp/
+*.tmp
+*.temp
+*.cache
+
+# --------------------------
+# Package lock files (optional)
+# Uncomment if you want to ignore
+# --------------------------
+# package-lock.json
+# yarn.lock
+# pnpm-lock.yaml
+
+# --------------------------
+# Claude Code
+# --------------------------
+.claude/
+
+# --------------------------
+# Misc
+# --------------------------
+*.pid
+*.seed
+*.pid.lock

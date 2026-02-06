@@ -1,0 +1,45 @@
+# Node modules
+node_modules
+npm-debug.log
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Git
+.git
+.gitignore
+
+# Tests
+tests
+coverage
+*.test.js
+jest.config.js
+
+# Documentation
+README.md
+DEVELOPMENT.md
+docs
+
+# IDE
+.vscode
+.idea
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Docker
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Logs
+logs
+*.log
+
+# Misc
+.editorconfig
+.prettierrc
+.eslintrc

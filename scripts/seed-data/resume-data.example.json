@@ -1,0 +1,57 @@
+{
+    "user": {
+        "email": "your-email@example.com",
+        "password": "your-secure-password"
+    },
+    "resume": {
+        "profile": {
+            "name": "홍길동",
+            "role": "Software Developer",
+            "email": "your-email@example.com",
+            "phone": "010-0000-0000",
+            "address": "서울특별시",
+            "summary": "자기소개를 입력하세요."
+        },
+        "skills": [
+            {
+                "category": "Backend",
+                "items": ["Java", "Spring Boot"]
+            },
+            {
+                "category": "Frontend",
+                "items": ["Vue.js", "React"]
+            }
+        ],
+        "experience": [
+            {
+                "id": 1,
+                "company": "회사명",
+                "period": "2024.01 ~ 현재",
+                "position": "직급",
+                "project": "프로젝트명",
+                "description": "프로젝트 설명",
+                "techStack": ["Java", "Spring Boot"]
+            }
+        ],
+        "education": [
+            {
+                "school": "대학교명",
+                "major": "전공",
+                "period": "졸업년도"
+            }
+        ],
+        "certifications": [
+            {
+                "name": "자격증명",
+                "date": "취득일"
+            }
+        ],
+        "personalProjects": [
+            {
+                "name": "프로젝트명",
+                "description": "프로젝트 설명",
+                "link": "https://github.com/..."
+            }
+        ]
+    }
+}
