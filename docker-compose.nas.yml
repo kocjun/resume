@@ -1,0 +1,107 @@
+# ===========================================
+# Synology NAS (DSM 7.2+) 전용 Docker Compose
+# ===========================================
+# Host 네트워크 모드 사용 (Docker bridge 네트워크 문제 우회)
+# 모든 컨테이너가 NAS의 localhost를 공유합니다.
+#
+# 사용 포트:
+#   - 27017: MongoDB
+#   - 3001:  Backend API
+#   - 3080:  Nginx (프론트엔드 + 리버스 프록시)
+#
+# 사용법:
+#   cd /volume1/docker/resume
+#   sudo docker-compose -f docker-compose.nas.yml up -d --build
+# ===========================================
+
+services:
+  # MongoDB Database
+  mongodb:
+    image: mongo:7.0
+    container_name: resume-mongodb
+    restart: unless-stopped
+    network_mode: host
+    environment:
+      MONGO_INITDB_DATABASE: resume-db
+    volumes:
+      - mongodb_data:/data/db
+      - mongodb_config:/data/configdb
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # Backend API Server
+  backend:
+    build:
+      context: ./resume-backend
+      dockerfile: Dockerfile
+    image: resume-backend:latest
+    container_name: resume-backend
+    restart: unless-stopped
+    network_mode: host
+    depends_on:
+      mongodb:
+        condition: service_healthy
+    volumes:
+      - ./resume-web/src/data.json:/resume-web/src/data.json:ro
+    environment:
+      NODE_ENV: production
+      PORT: 3001
+      MONGODB_URI: mongodb://127.0.0.1:27017/resume-db
+      JWT_SECRET: ${JWT_SECRET}
+      JWT_EXPIRES_IN: 7d
+      FRONTEND_URL: ${FRONTEND_URL:-http://localhost}
+      LOG_LEVEL: info
+      BCRYPT_SALT_ROUNDS: 10
+      ADMIN_EMAIL: ${ADMIN_EMAIL:-}
+      ADMIN_PASSWORD: ${ADMIN_PASSWORD:-}
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://127.0.0.1:3001/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Nginx (프론트엔드 빌드 + 웹서버 + 리버스 프록시)
+  nginx:
+    build:
+      context: .
+      dockerfile: Dockerfile.nas-web
+    image: resume-nginx-nas:latest
+    container_name: resume-nginx
+    restart: unless-stopped
+    network_mode: host
+    depends_on:
+      backend:
+        condition: service_started
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -q --spider http://127.0.0.1:3080/health.html || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+# Persistent volumes
+volumes:
+  mongodb_data:
+    driver: local
+  mongodb_config:
+    driver: local

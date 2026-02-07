@@ -1,0 +1,33 @@
+# ===========================================
+# Synology NAS용 프론트엔드 빌드 + Nginx 통합 이미지
+# 프론트엔드 빌드를 컨테이너 안에서 수행하므로
+# NAS에 Node.js 설치가 불필요합니다.
+# ===========================================
+
+# Stage 1: 프론트엔드 빌드
+FROM node:20-alpine AS builder
+
+WORKDIR /app
+
+COPY resume-web/package*.json ./
+RUN npm install
+
+COPY resume-web/ ./
+RUN npm run build
+
+# 빌드 결과 검증
+RUN test -f dist/index.html || (echo "Build failed: index.html not found" && exit 1)
+
+# Stage 2: Nginx 웹서버
+FROM nginx:alpine
+
+# 빌드된 프론트엔드 복사
+COPY --from=builder /app/dist /var/www/html
+
+# NAS용 Nginx 설정 복사
+COPY nginx/conf.d/nas.conf /etc/nginx/conf.d/default.conf
+
+EXPOSE 80
+
+HEALTHCHECK --interval=30s --timeout=10s --start-period=5s --retries=3 \
+  CMD wget -q --spider http://127.0.0.1:80/health.html || exit 1

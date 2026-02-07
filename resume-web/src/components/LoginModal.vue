@@ -23,7 +23,7 @@
             v-model="email"
             type="email"
             required
-            placeholder="admin@example.com"
+            placeholder="이메일을 입력하세요"
             class="w-full bg-reddit-dark border border-reddit-border rounded-md px-4 py-2 text-white focus:outline-none focus:border-reddit-orange transition-colors"
           />
         </div>
@@ -47,13 +47,6 @@
         </button>
       </form>
 
-      <!-- Hint -->
-      <div class="mt-6 p-3 bg-reddit-dark border border-reddit-border rounded-md">
-        <p class="text-xs text-reddit-text-secondary">
-          <strong class="text-white">Demo credentials:</strong><br>
-          시드 데이터로 생성된 계정을 사용하세요
-        </p>
-      </div>
     </div>
   </div>
 </template>
