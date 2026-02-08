@@ -7,7 +7,8 @@
 # 사용 포트:
 #   - 27017: MongoDB
 #   - 3001:  Backend API
-#   - 3080:  Nginx (프론트엔드 + 리버스 프록시)
+#   - 3080:  Nginx HTTP
+#   - 3443:  Nginx HTTPS (self-signed)
 #
 # 사용법:
 #   cd /volume1/docker/resume
