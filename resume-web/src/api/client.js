@@ -32,9 +32,13 @@ function removeToken() {
 async function apiRequest(endpoint, options = {}) {
   const token = getToken();
   const headers = {
-    'Content-Type': 'application/json',
     ...options.headers,
   };
+
+  // body가 있는 요청에만 Content-Type 설정
+  if (options.body) {
+    headers['Content-Type'] = 'application/json';
+  }
 
   if (token) {
     headers['Authorization'] = `Bearer ${token}`;

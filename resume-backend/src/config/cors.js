@@ -15,7 +15,12 @@ export const corsOptions = {
       'http://127.0.0.1:5173',
     ];
 
-    // 개발 환경에서는 모든 origin 허용 (선택사항)
+    // CORS_ALLOWED_ORIGINS 환경변수로 추가 origin 허용 (콤마 구분)
+    if (process.env.CORS_ALLOWED_ORIGINS) {
+      process.env.CORS_ALLOWED_ORIGINS.split(',').forEach(o => allowedOrigins.push(o.trim()));
+    }
+
+    // 개발 환경에서는 모든 origin 허용
     if (process.env.NODE_ENV === 'development') {
       callback(null, true);
       return;
