@@ -11,7 +11,8 @@
     "test:e2e:docker": "TEST_TARGET=docker playwright test"
   },
   "dependencies": {
-    "vue": "^3.5.24"
+    "vue": "^3.5.24",
+    "vue-router": "^4.6.4"
   },
   "devDependencies": {
     "@heroicons/vue": "^2.2.0",

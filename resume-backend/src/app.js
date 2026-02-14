@@ -70,5 +70,9 @@ export async function buildApp(opts = {}) {
   const resumeRoutes = await import('./routes/resume.routes.js');
   await app.register(resumeRoutes.default, { prefix: '/api/resume' });
 
+  // 채용정보 라우트 등록
+  const jobsRoutes = await import('./routes/jobs.routes.js');
+  await app.register(jobsRoutes.default, { prefix: '/api/jobs' });
+
   return app;
 }

@@ -183,3 +183,18 @@ export const resumeApi = {
       body: JSON.stringify(certifications),
     }),
 };
+
+/**
+ * 채용정보 API
+ */
+export const jobsApi = {
+  /**
+   * 채용 정보 검색
+   */
+  search: (skills) => {
+    const params = skills?.length
+      ? `?skills=${encodeURIComponent(skills.join(','))}`
+      : '';
+    return apiRequest(`/jobs/search${params}`);
+  },
+};
