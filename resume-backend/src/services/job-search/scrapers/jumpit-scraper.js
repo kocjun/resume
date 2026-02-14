@@ -72,7 +72,7 @@ export async function scrapeJumpit({ skills }) {
     browser = await puppeteer.launch({
       headless: 'new',
       args: [
-        '--no-sandbox',
+        ...(process.getuid?.() === 0 ? ['--no-sandbox'] : []),
         '--disable-setuid-sandbox',
         '--disable-blink-features=AutomationControlled',
       ],

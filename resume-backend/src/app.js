@@ -2,6 +2,7 @@ import Fastify from 'fastify';
 import cors from '@fastify/cors';
 import jwt from '@fastify/jwt';
 import helmet from '@fastify/helmet';
+import rateLimit from '@fastify/rate-limit';
 import dotenv from 'dotenv';
 import { errorHandler } from './middlewares/errorHandler.js';
 import { corsOptions } from './config/cors.js';
@@ -44,6 +45,12 @@ export async function buildApp(opts = {}) {
 
   // CORS 플러그인 등록
   await app.register(cors, corsOptions);
+
+  // Rate Limit 플러그인 등록 (전역: 1분당 100회)
+  await app.register(rateLimit, {
+    max: 100,
+    timeWindow: '1 minute',
+  });
 
   // JWT 플러그인 등록
   const jwtSecret = process.env.JWT_SECRET || (process.env.NODE_ENV === 'test' ? 'test-secret-key' : null);

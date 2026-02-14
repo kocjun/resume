@@ -46,8 +46,14 @@ export default async function authRoutes(app, options) {
     handler: authController.register,
   });
 
-  // 로그인
+  // 로그인 (브루트포스 방지를 위한 엄격한 rate limit)
   app.post('/login', {
+    config: {
+      rateLimit: {
+        max: 5,
+        timeWindow: '1 minute',
+      },
+    },
     schema: {
       description: 'Login with email and password',
       tags: ['auth'],

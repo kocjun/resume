@@ -20,9 +20,13 @@ export const corsOptions = {
       process.env.CORS_ALLOWED_ORIGINS.split(',').forEach(o => allowedOrigins.push(o.trim()));
     }
 
-    // 개발 환경에서는 모든 origin 허용
+    // 개발 환경에서도 허용 범위 제한
     if (process.env.NODE_ENV === 'development') {
-      callback(null, true);
+      if (!origin || origin.match(/^https?:\/\/(localhost|127\.0\.0\.1|192\.168\.\d+\.\d+|220\.88\.67\.\d+)(:\d+)?$/)) {
+        callback(null, true);
+      } else {
+        callback(new Error(`Origin ${origin} not allowed by CORS`));
+      }
       return;
     }
 
