@@ -46,8 +46,12 @@ export async function buildApp(opts = {}) {
   await app.register(cors, corsOptions);
 
   // JWT 플러그인 등록
+  const jwtSecret = process.env.JWT_SECRET || (process.env.NODE_ENV === 'test' ? 'test-secret-key' : null);
+  if (!jwtSecret) {
+    throw new Error('JWT_SECRET environment variable is required');
+  }
   await app.register(jwt, {
-    secret: process.env.JWT_SECRET || 'your-secret-key-change-in-production',
+    secret: jwtSecret,
   });
 
   // 글로벌 에러 핸들러 등록

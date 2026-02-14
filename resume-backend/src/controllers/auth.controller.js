@@ -1,3 +1,4 @@
+import crypto from 'crypto';
 import User from '../models/User.js';
 
 /**
@@ -73,7 +74,12 @@ export async function login(request, reply) {
     const envUsername = process.env.ADMIN_EMAIL;
     const envPassword = process.env.ADMIN_PASSWORD;
 
-    if (envUsername && envPassword && email === envUsername && password === envPassword) {
+    const emailMatch = envUsername && email.length === envUsername.length &&
+      crypto.timingSafeEqual(Buffer.from(email), Buffer.from(envUsername));
+    const passwordMatch = envPassword && password.length === envPassword.length &&
+      crypto.timingSafeEqual(Buffer.from(password), Buffer.from(envPassword));
+
+    if (emailMatch && passwordMatch) {
       // DB에서 해당 사용자 정보 조회 (Resume 연결을 위해 _id 필요)
       const user = await User.findOne({ email: email.toLowerCase() });
       const userId = user ? user._id : 'env-admin';
