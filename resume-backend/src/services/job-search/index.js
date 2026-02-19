@@ -6,7 +6,8 @@ import { scrapeSaramin } from './scrapers/saramin-scraper.js';
 import { scrapeWanted } from './scrapers/wanted-scraper.js';
 import { scrapeJobKorea } from './scrapers/jobkorea-scraper.js';
 import { scrapeJumpit } from './scrapers/jumpit-scraper.js';
-import { generateLinkedInLinks } from './link-generators.js';
+import { scrapeLinkedIn } from './scrapers/linkedin-scraper.js';
+import { scrapeWishket } from './scrapers/wishket-scraper.js';
 import { filterJobs } from './job-filter.js';
 import { LOCATIONS, DEFAULT_SKILLS, CACHE_TTL_MS } from './config.js';
 
@@ -50,11 +51,12 @@ export async function searchAllSites({ skills, locations, analysis } = {}) {
     scrapeWanted(params),
     scrapeJobKorea(params),
     scrapeJumpit(params),
-    Promise.resolve(generateLinkedInLinks(params)), // 링크드인은 링크만
+    scrapeLinkedIn(params),
+    scrapeWishket(params),
   ]);
 
-  const sourceNames = ['saramin', 'wanted', 'jobkorea', 'jumpit', 'linkedin'];
-  const displayNames = ['사람인', '원티드', '잡코리아', '점핏', 'LinkedIn'];
+  const sourceNames = ['saramin', 'wanted', 'jobkorea', 'jumpit', 'linkedin', 'wishket'];
+  const displayNames = ['사람인', '원티드', '잡코리아', '점핏', 'LinkedIn', '위시캣'];
 
   const sites = results.map((result, i) => {
     if (result.status === 'fulfilled') {

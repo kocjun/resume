@@ -182,6 +182,36 @@ export const resumeApi = {
       method: 'PUT',
       body: JSON.stringify(certifications),
     }),
+
+  /**
+   * PDF 다운로드
+   */
+  downloadPDF: async () => {
+    const token = getToken();
+    const headers = {};
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    const response = await fetch(`${API_BASE}/resume/pdf`, { headers });
+
+    if (!response.ok) {
+      const error = await response.json().catch(() => ({}));
+      throw new Error(error.error || 'PDF download failed');
+    }
+
+    const blob = await response.blob();
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = response.headers.get('Content-Disposition')?.match(/filename="?(.+?)"?$/)?.[1]
+      ? decodeURIComponent(response.headers.get('Content-Disposition').match(/filename="?(.+?)"?$/)[1])
+      : '이력서.pdf';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  },
 };
 
 /**
