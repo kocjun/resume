@@ -284,11 +284,6 @@
             "name": "Learn Kafka",
             "description": "Kafka, 이벤트 기반 MSA 백엔드, Docker 등 학습용 프로젝트.",
             "link": "https://github.com/kocjun/learn-kafka"
-        },
-        {
-            "name": "Backend Java",
-            "description": "Java 백엔드 샘플 프로젝트.",
-            "link": "https://github.com/kocjun/backendJava"
         }
     ]
 }
