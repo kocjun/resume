@@ -12,6 +12,7 @@ import ExperienceFormModal from '../components/ExperienceFormModal.vue'
 const isAuthenticated = inject('isAuthenticated')
 
 const data = ref(null)
+const pdfLoading = ref(false)
 const loading = ref(true)
 const error = ref(null)
 const showFormModal = ref(false)
@@ -134,6 +135,22 @@ const handleSaveExperience = async (experienceData) => {
   } catch (err) {
     console.error('Failed to save experience:', err)
     alert('Failed to save experience: ' + err.message)
+  }
+}
+
+const handleDownloadPDF = async () => {
+  if (isAuthenticated.value) {
+    pdfLoading.value = true
+    try {
+      await resumeApi.downloadPDF()
+    } catch (err) {
+      console.error('Failed to download PDF:', err)
+      alert('PDF 다운로드에 실패했습니다: ' + err.message)
+    } finally {
+      pdfLoading.value = false
+    }
+  } else {
+    window.print()
   }
 }
 
@@ -275,6 +292,20 @@ const handleDeleteExperience = async (experience) => {
       <!-- Main Feed (Experience) -->
       <main class="lg:col-span-8 space-y-4">
         <ProfileHeader :profile="data.profile" class="mb-6 rounded-none md:rounded-md overflow-hidden" />
+
+        <!-- PDF Download Button -->
+        <div class="px-4 md:px-0 mb-4 print:hidden">
+          <button
+            @click="handleDownloadPDF"
+            :disabled="pdfLoading"
+            class="flex items-center gap-2 px-4 py-2 bg-reddit-gray border border-reddit-border rounded-full text-sm text-reddit-text hover:border-reddit-orange hover:text-reddit-orange transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+            <svg v-if="!pdfLoading" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-4 h-4">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
+            </svg>
+            <div v-else class="w-4 h-4 border-2 border-reddit-orange border-t-transparent rounded-full animate-spin"></div>
+            {{ pdfLoading ? 'PDF 생성 중...' : 'PDF 다운로드' }}
+          </button>
+        </div>
 
         <ExperienceList
           :experiences="filteredExperiences"

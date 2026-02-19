@@ -85,9 +85,22 @@ function toggleRegion(regionKey) {
   expandedRegions.value[regionKey] = !expandedRegions.value[regionKey]
 }
 
-// 지역 확장 상태 확인
+// 지역 확장 상태 확인 (기본값: 접힌 상태)
 function isRegionExpanded(regionKey) {
-  return expandedRegions.value[regionKey] !== false // 기본값은 펼쳐진 상태
+  return expandedRegions.value[regionKey] === true
+}
+
+// 전체 접기/펼치기
+const allRegionsExpanded = computed(() => {
+  const keys = Object.keys(jobsByRegion.value)
+  return keys.length > 0 && keys.every((k) => expandedRegions.value[k] === true)
+})
+
+function toggleAllRegions() {
+  const expand = !allRegionsExpanded.value
+  Object.keys(jobsByRegion.value).forEach((k) => {
+    expandedRegions.value[k] = expand
+  })
 }
 
 async function searchJobs() {
@@ -200,12 +213,23 @@ onMounted(() => {
             </svg>
             <h2 class="text-xl font-bold text-white">당신에게 가장 적합한 상위 20개 공고 (지역별)</h2>
           </div>
-          <p class="text-sm text-reddit-text-secondary mb-4">
-            전체 사이트에서 매칭 점수가 가장 높은 공고를 지역별로 분류했습니다. 각 지역 헤더를 클릭하면 접기/펼치기 할 수 있습니다.
-            <span v-if="result.topMatches.filter(j => j.isContract || j.isFreelance).length > 0" class="text-reddit-orange">
-              계약직/프리랜서 공고는 자동으로 우선순위가 높습니다.
-            </span>
-          </p>
+          <div class="flex items-center justify-between mb-4">
+            <p class="text-sm text-reddit-text-secondary">
+              전체 사이트에서 매칭 점수가 가장 높은 공고를 지역별로 분류했습니다.
+              <span v-if="result.topMatches.filter(j => j.isContract || j.isFreelance).length > 0" class="text-reddit-orange">
+                계약직/프리랜서 공고는 자동으로 우선순위가 높습니다.
+              </span>
+            </p>
+            <button
+              @click="toggleAllRegions"
+              class="flex-shrink-0 flex items-center gap-1 px-3 py-1.5 bg-[#272729] hover:bg-[#343436] text-reddit-text-secondary text-xs font-semibold rounded-full transition-colors ml-3">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5">
+                <path v-if="allRegionsExpanded" stroke-linecap="round" stroke-linejoin="round" d="m4.5 15.75 7.5-7.5 7.5 7.5" />
+                <path v-else stroke-linecap="round" stroke-linejoin="round" d="m19.5 8.25-7.5 7.5-7.5-7.5" />
+              </svg>
+              {{ allRegionsExpanded ? '전체 접기' : '전체 펼치기' }}
+            </button>
+          </div>
         </div>
 
         <!-- 지역별 섹션 -->

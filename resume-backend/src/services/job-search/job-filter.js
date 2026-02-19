@@ -124,8 +124,10 @@ function filterJob(job, analysis) {
   const userYears = analysis?.yearsOfExperience || 0;
   const userSkills = analysis?.techStack?.primary || [];
 
-  // 제목 + 경력 텍스트 합치기
-  const fullText = `${title} ${experience}`.toLowerCase();
+  // 제목 + 경력 + 기술스택 + 직무 텍스트 합치기
+  const techText = (job.techStacks || []).join(' ');
+  const categoryText = job.jobCategory || '';
+  const fullText = `${title} ${experience} ${techText} ${categoryText}`.toLowerCase();
 
   // 1. 경력 요구사항 체크
   const requiredYears = extractRequiredExperience(fullText);

@@ -1,4 +1,5 @@
 <script setup>
+import { ref } from 'vue'
 import JobCard from './JobCard.vue'
 
 defineProps({
@@ -7,18 +8,30 @@ defineProps({
     required: true
   }
 })
+
+const expanded = ref(false)
 </script>
 
 <template>
   <div class="mb-8">
     <!-- Site Header -->
-    <div class="flex items-center gap-3 mb-4">
+    <button
+      v-if="site.status === 'ok' && site.jobs?.length"
+      @click="expanded = !expanded"
+      class="w-full flex items-center gap-3 mb-4 px-2 py-2 hover:bg-reddit-gray-dark/50 rounded-md transition-colors cursor-pointer">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
+           class="w-5 h-5 text-reddit-text-secondary transition-transform"
+           :class="{ 'rotate-90': expanded }">
+        <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+      </svg>
       <h2 class="text-xl font-bold text-white">{{ site.displayName || site.source }}</h2>
-      <span v-if="site.status === 'ok'"
-            class="text-xs bg-green-500/20 text-green-400 px-2 py-0.5 rounded-full font-bold">
+      <span class="text-xs bg-green-500/20 text-green-400 px-2 py-0.5 rounded-full font-bold">
         {{ site.jobs.length }}건
       </span>
-      <span v-else-if="site.status === 'link_only'"
+    </button>
+    <div v-else class="flex items-center gap-3 mb-4">
+      <h2 class="text-xl font-bold text-white">{{ site.displayName || site.source }}</h2>
+      <span v-if="site.status === 'link_only'"
             class="text-xs bg-reddit-blue/20 text-reddit-blue px-2 py-0.5 rounded-full font-bold">
         외부 링크
       </span>
@@ -46,7 +59,7 @@ defineProps({
     </a>
 
     <!-- Job List -->
-    <div v-else-if="site.status === 'ok' && site.jobs?.length" class="space-y-3">
+    <div v-else-if="site.status === 'ok' && site.jobs?.length" v-show="expanded" class="space-y-3">
       <JobCard v-for="(job, i) in site.jobs" :key="i" :job="job" />
     </div>
 

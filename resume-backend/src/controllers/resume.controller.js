@@ -1,5 +1,7 @@
+import puppeteer from 'puppeteer';
 import Resume from '../models/Resume.js';
 import User from '../models/User.js';
+import { renderResumePDF } from '../templates/resume-pdf.js';
 
 /**
  * env-admin 사용자의 실제 userId를 조회하는 헬퍼 함수
@@ -12,6 +14,11 @@ async function resolveUserId(request) {
     const user = await User.findOne({ email: request.user.email.toLowerCase() });
     if (user) {
       return { userId: user._id, fallback: false };
+    }
+    // DB에 해당 이메일 유저가 없으면 첫 번째 이력서의 userId를 사용
+    const firstResume = await Resume.findOne().lean();
+    if (firstResume) {
+      return { userId: firstResume.userId, fallback: true };
     }
     return { userId: null, fallback: true };
   }
@@ -336,6 +343,77 @@ export async function updateEducation(request, reply) {
     return reply.code(500).send({
       error: 'Internal server error',
     });
+  }
+}
+
+/**
+ * 이력서 PDF 생성
+ * GET /api/resume/pdf
+ */
+export async function generatePDF(request, reply) {
+  let browser;
+  try {
+    const { userId, fallback } = await resolveUserId(request);
+    let resume;
+
+    if (fallback) {
+      resume = await Resume.findOne().lean();
+    }
+    if (!resume) {
+      resume = await Resume.findOne({ userId }).lean();
+    }
+
+    if (!resume) {
+      return reply.code(404).send({ error: 'Resume not found' });
+    }
+
+    // DB에 personalProjects가 없으면 data.json에서 병합
+    if (!resume.personalProjects) {
+      try {
+        const { readFileSync } = await import('fs');
+        const { resolve, dirname } = await import('path');
+        const { fileURLToPath } = await import('url');
+        const __dirname = dirname(fileURLToPath(import.meta.url));
+        const dataPath = resolve(__dirname, '../../../resume-web/src/data.json');
+        const fallback = JSON.parse(readFileSync(dataPath, 'utf-8'));
+        resume.personalProjects = fallback.personalProjects || [];
+      } catch {
+        resume.personalProjects = [];
+      }
+    }
+
+    const html = renderResumePDF(resume);
+
+    browser = await puppeteer.launch({
+      headless: 'new',
+      args: [
+        ...(process.getuid?.() === 0 ? ['--no-sandbox'] : []),
+        '--disable-setuid-sandbox',
+      ],
+    });
+
+    const page = await browser.newPage();
+    await page.setContent(html, { waitUntil: 'networkidle0' });
+
+    const pdfBuffer = await page.pdf({
+      format: 'A4',
+      printBackground: true,
+      margin: { top: '10mm', right: '10mm', bottom: '10mm', left: '10mm' },
+    });
+
+    const fileName = `이력서_${(resume.profile?.name || 'document').replace(/\s+/g, '_')}.pdf`;
+
+    return reply
+      .type('application/pdf')
+      .header('Content-Disposition', `attachment; filename="${encodeURIComponent(fileName)}"`)
+      .send(Buffer.from(pdfBuffer));
+  } catch (error) {
+    request.log.error(error);
+    return reply.code(500).send({ error: 'Internal server error' });
+  } finally {
+    if (browser) {
+      await browser.close();
+    }
   }
 }
 

@@ -14,14 +14,31 @@ provide('isAuthenticated', isAuthenticated)
 
 onMounted(() => {
   isAuthenticated.value = authApi.isAuthenticated()
+  if (isAuthenticated.value) {
+    userEmail.value = parseEmailFromToken()
+  }
 })
 
 const handleLogin = () => {
   showLoginModal.value = true
 }
 
+const userEmail = ref('')
+
 const handleLoginSuccess = () => {
   isAuthenticated.value = true
+  userEmail.value = parseEmailFromToken()
+}
+
+function parseEmailFromToken() {
+  const token = localStorage.getItem('token')
+  if (!token) return ''
+  try {
+    const payload = JSON.parse(atob(token.split('.')[1]))
+    return payload.email || ''
+  } catch {
+    return ''
+  }
 }
 
 const handleLogout = () => {
@@ -51,7 +68,7 @@ const handleLogout = () => {
              :class="route.path === '/' ? 'bg-reddit-orange/20 text-reddit-orange' : 'text-reddit-text-secondary hover:text-white hover:bg-[#272729]'">
              Resume
            </router-link>
-           <router-link to="/jobs"
+           <router-link v-if="isAuthenticated" to="/jobs"
              class="px-3 py-1.5 rounded-full text-sm font-bold transition-colors"
              :class="route.path === '/jobs' ? 'bg-reddit-orange/20 text-reddit-orange' : 'text-reddit-text-secondary hover:text-white hover:bg-[#272729]'">
              Jobs
@@ -66,7 +83,8 @@ const handleLogout = () => {
            class="bg-reddit-orange hover:opacity-90 text-white rounded-full px-5 py-1.5 font-bold text-sm transition-opacity">
            Log In
          </button>
-         <div v-else class="flex items-center gap-2">
+         <div v-else class="flex items-center gap-3">
+           <span class="text-reddit-text-secondary text-sm hidden sm:inline">{{ userEmail }}</span>
            <button
              @click="handleLogout"
              class="text-reddit-text-secondary hover:text-white text-sm transition-colors">

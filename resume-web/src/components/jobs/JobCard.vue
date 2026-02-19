@@ -23,9 +23,19 @@ defineProps({
         {{ job.title }}
       </h3>
 
-      <!-- Salary -->
-      <div v-if="job.salary" class="text-sm text-reddit-text-secondary mb-3">
-        {{ job.salary }}
+      <!-- Salary / Budget -->
+      <div v-if="job.salary || job.budget" class="text-sm text-reddit-text-secondary mb-3">
+        {{ job.salary || job.budget }}
+      </div>
+
+      <!-- 위시캣 태그 (근무형태, 근무방식) -->
+      <div v-if="job.workType || job.workStyle" class="flex gap-2 mb-3">
+        <span v-if="job.workType" class="px-2 py-0.5 text-xs rounded bg-reddit-orange/20 text-reddit-orange">
+          {{ job.workType }}
+        </span>
+        <span v-if="job.workStyle" class="px-2 py-0.5 text-xs rounded bg-reddit-blue/20 text-reddit-blue">
+          {{ job.workStyle }}
+        </span>
       </div>
 
       <!-- Link -->
