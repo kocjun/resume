@@ -124,6 +124,15 @@ export default async function resumeRoutes(app, options) {
     handler: resumeController.updateEducation,
   });
 
+  // PDF 생성
+  app.get('/pdf', {
+    schema: {
+      description: 'Generate resume PDF',
+      tags: ['resume'],
+    },
+    handler: resumeController.generatePDF,
+  });
+
   // 자격증 업데이트
   app.put('/certifications', {
     schema: {

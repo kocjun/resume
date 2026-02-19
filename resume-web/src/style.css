@@ -58,3 +58,33 @@
         transform: translateY(0);
     }
 }
+
+@media print {
+    body {
+        background: white !important;
+        color: #333 !important;
+    }
+
+    nav,
+    .print\\:hidden,
+    footer {
+        display: none !important;
+    }
+
+    .bg-reddit-gray,
+    .bg-reddit-dark {
+        background: white !important;
+    }
+
+    .text-reddit-text {
+        color: #333 !important;
+    }
+
+    .text-reddit-text-secondary {
+        color: #666 !important;
+    }
+
+    .border-reddit-border {
+        border-color: #e0e0e0 !important;
+    }
+}
