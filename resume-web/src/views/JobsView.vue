@@ -9,6 +9,16 @@ const error = ref(null)
 const result = ref(null)
 const expandedRegions = ref({})
 
+// 키워드 편집 상태
+const editableKeywords = ref([])
+const keywordInput = ref('')
+
+// 지역 필터 상태 (기본값: 전체 선택)
+const selectedRegions = ref(['판교', '경기도나머지', '세종', '천안', '대전청주'])
+
+// 정렬 기준 (매칭점수순 / 마감일순)
+const sortBy = ref('matchScore')
+
 // API 결과가 있는 사이트 (ok 상태)
 const apiSites = computed(() =>
   result.value?.sites?.filter((s) => s.status === 'ok') || []
@@ -27,6 +37,39 @@ const otherSites = computed(() =>
 const totalJobs = computed(() =>
   result.value?.sites?.reduce((sum, s) => sum + (s.jobs?.length || 0), 0) || 0
 )
+
+// 마감일 파싱 (~ MM/DD 형태 → Date 객체, 실패 시 null)
+function parseDeadline(deadline) {
+  if (!deadline) return null
+  const match = String(deadline).match(/~\s*(\d{1,2})\/(\d{1,2})/)
+  if (!match) return null
+  const now = new Date()
+  const year = now.getFullYear()
+  const month = parseInt(match[1], 10) - 1
+  const day = parseInt(match[2], 10)
+  const date = new Date(year, month, day)
+  // 이미 지난 날짜면 내년으로 처리
+  if (date < new Date(now.getFullYear(), now.getMonth(), now.getDate())) {
+    date.setFullYear(year + 1)
+  }
+  return date
+}
+
+// 정렬 함수
+function sortJobs(jobs) {
+  if (sortBy.value === 'deadline') {
+    return [...jobs].sort((a, b) => {
+      const da = parseDeadline(a.deadline)
+      const db = parseDeadline(b.deadline)
+      if (da && db) return da - db
+      if (da) return -1
+      if (db) return 1
+      return 0
+    })
+  }
+  // 기본: 매칭점수 내림차순
+  return [...jobs].sort((a, b) => (b.matchScore || 0) - (a.matchScore || 0))
+}
 
 // 지역별로 공고 그룹화
 const jobsByRegion = computed(() => {
@@ -64,6 +107,16 @@ const jobsByRegion = computed(() => {
   )
 })
 
+// 필터 + 정렬이 적용된 지역별 공고
+const filteredJobsByRegion = computed(() => {
+  const result = {}
+  for (const [key, jobs] of Object.entries(jobsByRegion.value)) {
+    if (!selectedRegions.value.includes(key)) continue
+    result[key] = sortJobs(jobs)
+  }
+  return result
+})
+
 const regionNames = {
   판교: '판교/분당',
   경기도나머지: '경기도 (기타)',
@@ -92,15 +145,50 @@ function isRegionExpanded(regionKey) {
 
 // 전체 접기/펼치기
 const allRegionsExpanded = computed(() => {
-  const keys = Object.keys(jobsByRegion.value)
+  const keys = Object.keys(filteredJobsByRegion.value)
   return keys.length > 0 && keys.every((k) => expandedRegions.value[k] === true)
 })
 
 function toggleAllRegions() {
   const expand = !allRegionsExpanded.value
-  Object.keys(jobsByRegion.value).forEach((k) => {
+  Object.keys(filteredJobsByRegion.value).forEach((k) => {
     expandedRegions.value[k] = expand
   })
+}
+
+// 키워드 추가
+function addKeyword(value) {
+  const trimmed = value.trim().replace(/,$/, '').trim()
+  if (trimmed && !editableKeywords.value.includes(trimmed)) {
+    editableKeywords.value.push(trimmed)
+  }
+  keywordInput.value = ''
+}
+
+function onKeywordKeydown(e) {
+  if (e.key === 'Enter' || e.key === ',') {
+    e.preventDefault()
+    addKeyword(keywordInput.value)
+  }
+}
+
+function removeKeyword(keyword) {
+  editableKeywords.value = editableKeywords.value.filter((k) => k !== keyword)
+}
+
+// 키워드로 재검색
+async function searchWithKeywords() {
+  loading.value = true
+  error.value = null
+  try {
+    result.value = await jobsApi.search(editableKeywords.value)
+    editableKeywords.value = result.value.skillsUsed ? [...result.value.skillsUsed] : []
+  } catch (err) {
+    console.error('Failed to search jobs:', err)
+    error.value = err.message
+  } finally {
+    loading.value = false
+  }
 }
 
 async function searchJobs() {
@@ -108,6 +196,7 @@ async function searchJobs() {
   error.value = null
   try {
     result.value = await jobsApi.search()
+    editableKeywords.value = result.value.skillsUsed ? [...result.value.skillsUsed] : []
   } catch (err) {
     console.error('Failed to search jobs:', err)
     error.value = err.message
@@ -161,13 +250,29 @@ onMounted(() => {
 
       <!-- Search Metadata -->
       <div v-if="result" class="space-y-3">
-        <!-- Skills Used -->
+        <!-- Skills Used (편집 가능한 태그 입력창) -->
         <div>
           <span class="text-xs text-reddit-text-secondary mr-2">검색 스킬:</span>
-          <span v-for="skill in result.skillsUsed" :key="skill"
-                class="inline-block px-2.5 py-1 rounded-full text-xs font-semibold bg-[#272729] text-reddit-text-secondary mr-1 mb-1">
-            {{ skill }}
-          </span>
+          <div class="inline-flex flex-wrap items-center gap-1 mt-1">
+            <span v-for="keyword in editableKeywords" :key="keyword"
+                  class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-[#272729] text-reddit-text-secondary">
+              {{ keyword }}
+              <button @click="removeKeyword(keyword)"
+                      class="text-reddit-text-secondary hover:text-white leading-none ml-0.5">×</button>
+            </span>
+            <input
+              v-model="keywordInput"
+              @keydown="onKeywordKeydown"
+              @blur="addKeyword(keywordInput)"
+              placeholder="키워드 입력 후 Enter"
+              class="bg-transparent text-xs text-white placeholder-reddit-text-secondary outline-none border-b border-reddit-border focus:border-reddit-orange w-32 px-1 py-0.5" />
+            <button
+              @click="searchWithKeywords"
+              :disabled="loading"
+              class="ml-1 flex items-center gap-1 px-3 py-1 bg-reddit-orange hover:opacity-90 disabled:opacity-50 text-white text-xs font-bold rounded-full transition-opacity">
+              이 키워드로 검색
+            </button>
+          </div>
         </div>
         <!-- Locations Used -->
         <div>
@@ -206,6 +311,33 @@ onMounted(() => {
     <div v-else-if="result">
       <!-- Top 10 Matches -->
       <div v-if="result.topMatches?.length > 0" class="mb-8">
+        <!-- 지역 필터 + 정렬 컨트롤 -->
+        <div class="bg-reddit-gray border border-reddit-border rounded-none md:rounded-md p-4 mb-4 flex flex-wrap items-center gap-4">
+          <!-- 지역 필터 -->
+          <div class="flex flex-wrap items-center gap-3">
+            <span class="text-xs text-reddit-text-secondary font-semibold">지역:</span>
+            <label v-for="(label, key) in regionNames" :key="key" class="flex items-center gap-1 cursor-pointer">
+              <input type="checkbox" :value="key" v-model="selectedRegions"
+                     class="accent-reddit-orange" />
+              <span class="text-xs text-reddit-text-secondary">{{ label }}</span>
+            </label>
+          </div>
+          <!-- 구분선 -->
+          <div class="hidden md:block w-px h-5 bg-reddit-border"></div>
+          <!-- 정렬 기준 -->
+          <div class="flex items-center gap-3">
+            <span class="text-xs text-reddit-text-secondary font-semibold">정렬:</span>
+            <label class="flex items-center gap-1 cursor-pointer">
+              <input type="radio" value="matchScore" v-model="sortBy" class="accent-reddit-orange" />
+              <span class="text-xs text-reddit-text-secondary">매칭점수순</span>
+            </label>
+            <label class="flex items-center gap-1 cursor-pointer">
+              <input type="radio" value="deadline" v-model="sortBy" class="accent-reddit-orange" />
+              <span class="text-xs text-reddit-text-secondary">마감일순</span>
+            </label>
+          </div>
+        </div>
+
         <div class="bg-gradient-to-r from-reddit-orange/20 to-reddit-orange/5 border border-reddit-orange rounded-none md:rounded-md p-6 mb-4">
           <div class="flex items-center gap-3 mb-3">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-6 h-6 text-reddit-orange">
@@ -233,7 +365,7 @@ onMounted(() => {
         </div>
 
         <!-- 지역별 섹션 -->
-        <div v-for="(jobs, regionKey) in jobsByRegion" :key="regionKey" class="mb-6">
+        <div v-for="(jobs, regionKey) in filteredJobsByRegion" :key="regionKey" class="mb-6">
           <button
             @click="toggleRegion(regionKey)"
             class="w-full flex items-center gap-2 mb-3 px-2 py-2 hover:bg-reddit-gray-dark/50 rounded-md transition-colors cursor-pointer">
@@ -252,73 +384,74 @@ onMounted(() => {
           <div v-show="isRegionExpanded(regionKey)" class="space-y-3">
           <div v-for="(job, index) in jobs" :key="`top-${job.url}`"
                class="bg-reddit-gray border border-reddit-border hover:border-reddit-orange rounded-none md:rounded-md p-4 transition-colors">
-            <div class="flex gap-4">
-              <!-- Match Score Badge -->
-              <div class="flex-shrink-0">
-                <div class="w-12 h-12 rounded-lg flex flex-col items-center justify-center border-2"
-                     :class="job.matchScore >= 60 ? 'bg-reddit-orange/20 border-reddit-orange text-reddit-orange' : 'bg-reddit-blue/20 border-reddit-blue text-reddit-blue'">
-                  <span class="text-xs font-bold leading-none">매칭</span>
-                  <span class="text-lg font-bold leading-none">{{ job.matchScore }}</span>
+            <!-- Job Content -->
+            <div class="flex-1 min-w-0">
+              <!-- 고용형태 태그 (제목 위) -->
+              <div v-if="job.isContract || job.isFreelance" class="flex gap-2 mb-1.5">
+                <span v-if="job.isContract" class="px-2 py-0.5 bg-reddit-orange/20 text-reddit-orange text-xs font-semibold rounded-full">
+                  계약직
+                </span>
+                <span v-if="job.isFreelance" class="px-2 py-0.5 bg-reddit-orange/20 text-reddit-orange text-xs font-semibold rounded-full">
+                  프리랜서
+                </span>
+              </div>
+
+              <div class="flex items-start justify-between gap-3 mb-2">
+                <h3 class="text-base font-semibold flex-1 min-w-0">
+                  <a :href="job.url" target="_blank" rel="noopener noreferrer"
+                     class="text-white hover:text-reddit-orange transition-colors hover:underline">
+                    {{ job.title }}
+                  </a>
+                </h3>
+                <!-- 마감일 (우상단) -->
+                <div v-if="job.deadline" class="flex-shrink-0 text-xs"
+                     :class="parseDeadline(job.deadline) && (parseDeadline(job.deadline) - new Date()) / 86400000 <= 7 ? 'text-red-400' : 'text-reddit-text-secondary'">
+                  <template v-if="parseDeadline(job.deadline)">
+                    {{ (() => { const d = Math.round((parseDeadline(job.deadline) - new Date()) / 86400000); return d === 0 ? 'D-day' : d > 0 ? `D-${d}` : `D+${Math.abs(d)}` })() }}
+                    <span class="ml-1 opacity-70">{{ job.deadline }}</span>
+                  </template>
+                  <template v-else>{{ job.deadline }}</template>
                 </div>
               </div>
 
-              <!-- Job Content -->
-              <div class="flex-1 min-w-0">
-                <div class="flex items-start justify-between gap-3 mb-2">
-                  <h3 class="text-base font-semibold">
-                    <a :href="job.url" target="_blank" rel="noopener noreferrer"
-                       class="text-white hover:text-reddit-orange transition-colors hover:underline">
-                      {{ job.title }}
-                    </a>
-                  </h3>
-                </div>
+              <div class="flex flex-wrap items-center gap-3 text-xs text-reddit-text-secondary mb-2">
+                <span v-if="job.company" class="flex items-center gap-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-3.5 h-3.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Z" />
+                  </svg>
+                  {{ job.company }}
+                </span>
+                <span v-if="job.location" class="flex items-center gap-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-3.5 h-3.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
+                  </svg>
+                  {{ job.location }}
+                </span>
+                <span v-if="job.experience" class="flex items-center gap-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-3.5 h-3.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 0 0 .75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 0 0-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0 1 12 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 0 1-.673-.38m0 0A2.18 2.18 0 0 1 3 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 0 1 3.413-.387m7.5 0V5.25A2.25 2.25 0 0 0 13.5 3h-3a2.25 2.25 0 0 0-2.25 2.25v.894m7.5 0a48.667 48.667 0 0 0-7.5 0M12 12.75h.008v.008H12v-.008Z" />
+                  </svg>
+                  {{ job.experience }}
+                </span>
+                <span class="flex items-center gap-1 text-reddit-blue">
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-3.5 h-3.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-1.605.42-3.113 1.157-4.418" />
+                  </svg>
+                  {{ job.sourceName }}
+                </span>
+              </div>
 
-                <div class="flex flex-wrap items-center gap-3 text-xs text-reddit-text-secondary mb-2">
-                  <span v-if="job.company" class="flex items-center gap-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-3.5 h-3.5">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3.75h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Zm0 3h.008v.008h-.008v-.008Z" />
-                    </svg>
-                    {{ job.company }}
-                  </span>
-                  <span v-if="job.location" class="flex items-center gap-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-3.5 h-3.5">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1 1 15 0Z" />
-                    </svg>
-                    {{ job.location }}
-                  </span>
-                  <span v-if="job.experience" class="flex items-center gap-1">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-3.5 h-3.5">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 0 0 .75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 0 0-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0 1 12 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 0 1-.673-.38m0 0A2.18 2.18 0 0 1 3 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 0 1 3.413-.387m7.5 0V5.25A2.25 2.25 0 0 0 13.5 3h-3a2.25 2.25 0 0 0-2.25 2.25v.894m7.5 0a48.667 48.667 0 0 0-7.5 0M12 12.75h.008v.008H12v-.008Z" />
-                    </svg>
-                    {{ job.experience }}
-                  </span>
-                  <span class="flex items-center gap-1 text-reddit-blue">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-3.5 h-3.5">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M12 21a9.004 9.004 0 0 0 8.716-6.747M12 21a9.004 9.004 0 0 1-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 0 1 7.843 4.582M12 3a8.997 8.997 0 0 0-7.843 4.582m15.686 0A11.953 11.953 0 0 1 12 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0 1 21 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0 1 12 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 0 1 3 12c0-1.605.42-3.113 1.157-4.418" />
-                    </svg>
-                    {{ job.sourceName }}
-                  </span>
-                </div>
-
-                <!-- Employment Type Tags & Action -->
-                <div class="flex items-center justify-between gap-3 mt-2">
-                  <div v-if="job.isContract || job.isFreelance" class="flex gap-2">
-                    <span v-if="job.isContract" class="px-2 py-0.5 bg-reddit-orange/20 text-reddit-orange text-xs font-semibold rounded-full">
-                      계약직
-                    </span>
-                    <span v-if="job.isFreelance" class="px-2 py-0.5 bg-reddit-orange/20 text-reddit-orange text-xs font-semibold rounded-full">
-                      프리랜서
-                    </span>
-                  </div>
-                  <a :href="job.url" target="_blank" rel="noopener noreferrer"
-                     class="flex-shrink-0 flex items-center gap-1 px-3 py-1.5 bg-reddit-orange hover:bg-reddit-orange/90 text-white text-xs font-bold rounded-full transition-colors">
-                    상세보기
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5">
-                      <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
-                    </svg>
-                  </a>
-                </div>
+              <!-- 하단: 매칭점수 + 상세보기 버튼 -->
+              <div class="flex items-center justify-between gap-3 mt-2">
+                <span class="text-xs text-reddit-text-secondary">매칭 {{ job.matchScore }}점</span>
+                <a :href="job.url" target="_blank" rel="noopener noreferrer"
+                   class="flex-shrink-0 flex items-center gap-1 px-3 py-1.5 bg-reddit-orange hover:bg-reddit-orange/90 text-white text-xs font-bold rounded-full transition-colors">
+                  상세보기
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-3.5 h-3.5">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3" />
+                  </svg>
+                </a>
               </div>
             </div>
           </div>

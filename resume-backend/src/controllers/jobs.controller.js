@@ -21,7 +21,13 @@ export async function searchJobs(request, reply) {
 
     // 인증된 사용자: DB에서 이력서 조회
     if (request.user?.userId) {
-      resumeData = await Resume.findOne({ userId: request.user.userId }).lean();
+      const userId = request.user.userId;
+      if (userId === 'env-admin') {
+        // env-admin은 첫 번째 이력서 사용
+        resumeData = await Resume.findOne().lean();
+      } else {
+        resumeData = await Resume.findOne({ userId }).lean();
+      }
     }
 
     // 이력서가 없으면 fallback 데이터 사용
