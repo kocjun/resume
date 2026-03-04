@@ -382,7 +382,8 @@ export async function generatePDF(request, reply) {
       }
     }
 
-    const html = renderResumePDF(resume);
+    const lang = request.query.lang === 'en' ? 'en' : 'ko';
+    const html = renderResumePDF(resume, lang);
 
     browser = await puppeteer.launch({
       headless: 'new',
@@ -401,7 +402,12 @@ export async function generatePDF(request, reply) {
       margin: { top: '10mm', right: '10mm', bottom: '10mm', left: '10mm' },
     });
 
-    const fileName = `이력서_${(resume.profile?.name || 'document').replace(/\s+/g, '_')}.pdf`;
+    const profileName = typeof resume.profile?.name === 'object'
+      ? (resume.profile.name[lang] || resume.profile.name.ko || 'document')
+      : (resume.profile?.name || 'document');
+    const fileName = lang === 'en'
+      ? `Resume_${profileName.replace(/\s+/g, '_')}.pdf`
+      : `이력서_${profileName.replace(/\s+/g, '_')}.pdf`;
 
     return reply
       .type('application/pdf')
