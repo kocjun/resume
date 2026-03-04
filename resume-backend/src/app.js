@@ -46,11 +46,13 @@ export async function buildApp(opts = {}) {
   // CORS 플러그인 등록
   await app.register(cors, corsOptions);
 
-  // Rate Limit 플러그인 등록 (전역: 1분당 100회)
-  await app.register(rateLimit, {
-    max: 100,
-    timeWindow: '1 minute',
-  });
+  // Rate Limit 플러그인 등록 (전역: 1분당 100회, 테스트 환경 제외)
+  if (process.env.NODE_ENV !== 'test') {
+    await app.register(rateLimit, {
+      max: 100,
+      timeWindow: '1 minute',
+    });
+  }
 
   // JWT 플러그인 등록
   const jwtSecret = process.env.JWT_SECRET || (process.env.NODE_ENV === 'test' ? 'test-secret-key' : null);
