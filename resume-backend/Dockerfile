@@ -15,8 +15,12 @@ FROM node:20-alpine AS production
 
 WORKDIR /app
 
-# Install wget for healthcheck
-RUN apk add --no-cache wget
+# Install wget for healthcheck and Chromium for Puppeteer PDF generation
+RUN apk add --no-cache wget chromium
+
+# Configure Puppeteer to use system Chromium
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
+    PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
 
 # Copy dependencies from previous stage
 COPY --from=dependencies /app/node_modules ./node_modules

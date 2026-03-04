@@ -363,8 +363,18 @@ export async function generatePDF(request, reply) {
       resume = await Resume.findOne({ userId }).lean();
     }
 
+    // DB에 resume이 없으면 data.json을 fallback으로 사용
     if (!resume) {
-      return reply.code(404).send({ error: 'Resume not found' });
+      try {
+        const { readFileSync } = await import('fs');
+        const { resolve, dirname } = await import('path');
+        const { fileURLToPath } = await import('url');
+        const __dirname = dirname(fileURLToPath(import.meta.url));
+        const dataPath = resolve(__dirname, '../../../resume-web/src/data.json');
+        resume = JSON.parse(readFileSync(dataPath, 'utf-8'));
+      } catch {
+        return reply.code(404).send({ error: 'Resume not found' });
+      }
     }
 
     // DB에 personalProjects가 없으면 data.json에서 병합
@@ -375,8 +385,8 @@ export async function generatePDF(request, reply) {
         const { fileURLToPath } = await import('url');
         const __dirname = dirname(fileURLToPath(import.meta.url));
         const dataPath = resolve(__dirname, '../../../resume-web/src/data.json');
-        const fallback = JSON.parse(readFileSync(dataPath, 'utf-8'));
-        resume.personalProjects = fallback.personalProjects || [];
+        const fallbackData = JSON.parse(readFileSync(dataPath, 'utf-8'));
+        resume.personalProjects = fallbackData.personalProjects || [];
       } catch {
         resume.personalProjects = [];
       }
@@ -387,9 +397,14 @@ export async function generatePDF(request, reply) {
 
     browser = await puppeteer.launch({
       headless: 'new',
+      ...(process.env.PUPPETEER_EXECUTABLE_PATH && {
+        executablePath: process.env.PUPPETEER_EXECUTABLE_PATH,
+      }),
       args: [
-        ...(process.getuid?.() === 0 ? ['--no-sandbox'] : []),
+        '--no-sandbox',
         '--disable-setuid-sandbox',
+        '--disable-gpu',
+        '--disable-dev-shm-usage',
       ],
     });
 

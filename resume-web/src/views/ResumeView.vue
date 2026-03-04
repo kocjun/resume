@@ -104,7 +104,13 @@ const loadResumeData = async () => {
     }
   } catch (err) {
     console.error('Failed to load resume data:', err)
-    error.value = err.message
+    // 401(인증 만료/실패) 시 조용히 fallback 전환, 토큰 정리
+    if (err.message?.includes('401') || err.message?.includes('Unauthorized') || err.message?.includes('authentication')) {
+      localStorage.removeItem('token')
+      isAuthenticated.value = false
+    } else {
+      error.value = err.message
+    }
     data.value = resumeDataFallback
   } finally {
     loading.value = false

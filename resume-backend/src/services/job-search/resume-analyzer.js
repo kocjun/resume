@@ -2,6 +2,13 @@
  * 이력서 데이터 분석 및 검색 조건 자동 추출
  */
 
+/** LocalizedString ({ko, en}) 또는 plain string을 문자열로 변환 */
+function L(value) {
+  if (!value) return '';
+  if (typeof value === 'string') return value;
+  return value.ko || value.en || '';
+}
+
 /**
  * 경력 기간을 계산하여 연차 추출
  * @param {Array} experience - 경력 목록
@@ -11,7 +18,7 @@ function calculateYearsOfExperience(experience) {
   if (!experience?.length) return 0;
 
   const periods = experience.map((exp) => {
-    const match = exp.period?.match(/(\d{4})\.(\d{2})\s*~\s*(\d{4})\.(\d{2})/);
+    const match = L(exp.period).match(/(\d{4})\.(\d{2})\s*~\s*(\d{4})\.(\d{2})/);
     if (!match) return 0;
 
     const [, startYear, startMonth, endYear, endMonth] = match;
@@ -86,9 +93,9 @@ function extractPreferredRoles(experience) {
   const roles = new Set();
 
   recentExperience.forEach((exp) => {
-    const position = exp.position?.toLowerCase() || '';
-    const project = exp.project?.toLowerCase() || '';
-    const description = exp.description?.toLowerCase() || '';
+    const position = L(exp.position).toLowerCase();
+    const project = L(exp.project).toLowerCase();
+    const description = L(exp.description).toLowerCase();
 
     // 키워드 매칭
     if (position.includes('프리랜서') || position.includes('차장')) {
