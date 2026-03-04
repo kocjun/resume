@@ -1,15 +1,18 @@
 {
     "profile": {
-        "name": "전영창",
-        "role": "15+ Years Full Stack Developer",
+        "name": { "ko": "전영창", "en": "Yeongchang Jeon" },
+        "role": { "ko": "15년+ 풀스택 개발자", "en": "15+ Years Full Stack Developer" },
         "email": "Yeongchang.jeon@gmail.com",
         "phone": "010-8838-2248",
-        "address": "경기도 화성시",
-        "summary": "15년 이상 Java/Spring 기반 엔터프라이즈 시스템의 설계, 개발, 운영 경험을 보유한 시니어 풀스택 개발자입니다. 삼성전자, 세메스, 질병관리청 등 대규모 사용자 대상 미션 크리티컬 시스템을 다수 구축하며, 아키텍처 설계부터 성능 최적화까지 전 과정을 리드했습니다.\n\nSpring Boot, Vue.js, JPA 등 모던 기술 스택의 선제적 도입을 통해 개발 생산성을 향상시키고, 복잡한 비즈니스 요구사항을 체계적으로 해결하는 데 강점이 있습니다. 최근에는 Node.js, Docker, Kafka 등 클라우드 네이티브 기술을 학습하며 기술 역량을 확장하고 있습니다."
+        "address": { "ko": "경기도 화성시", "en": "Hwaseong, Gyeonggi-do, South Korea" },
+        "summary": {
+            "ko": "15년 이상 Java/Spring 기반 엔터프라이즈 시스템의 설계, 개발, 운영 경험을 보유한 시니어 풀스택 개발자입니다. 삼성전자, 세메스, 질병관리청 등 대규모 사용자 대상 미션 크리티컬 시스템을 다수 구축하며, 아키텍처 설계부터 성능 최적화까지 전 과정을 리드했습니다.\n\nSpring Boot, Vue.js, JPA 등 모던 기술 스택의 선제적 도입을 통해 개발 생산성을 향상시키고, 복잡한 비즈니스 요구사항을 체계적으로 해결하는 데 강점이 있습니다. 최근에는 Node.js, Docker, Kafka 등 클라우드 네이티브 기술을 학습하며 기술 역량을 확장하고 있습니다.",
+            "en": "Senior full-stack developer with 15+ years of experience designing, building, and operating Java/Spring-based enterprise systems. Delivered mission-critical platforms for Samsung Electronics, Semes, and the Korea Disease Control and Prevention Agency, leading end-to-end from architecture through performance optimization.\n\nStrong track record of proactively adopting modern stacks — Spring Boot, Vue.js, JPA — to accelerate delivery and tackle complex business requirements. Currently expanding cloud-native expertise with Node.js, Docker, and Kafka."
+        }
     },
     "skills": [
         {
-            "category": "Backend",
+            "category": { "ko": "백엔드", "en": "Backend" },
             "items": [
                 "Java",
                 "Spring Boot",
@@ -21,7 +24,7 @@
             ]
         },
         {
-            "category": "Frontend",
+            "category": { "ko": "프론트엔드", "en": "Frontend" },
             "items": [
                 "Vue.js",
                 "React",
@@ -34,7 +37,7 @@
             ]
         },
         {
-            "category": "Database",
+            "category": { "ko": "데이터베이스", "en": "Database" },
             "items": [
                 "Oracle",
                 "MySQL",
@@ -42,7 +45,7 @@
             ]
         },
         {
-            "category": "DevOps & Tools",
+            "category": { "ko": "DevOps & 도구", "en": "DevOps & Tools" },
             "items": [
                 "Git",
                 "Docker",
@@ -57,11 +60,14 @@
     "experience": [
         {
             "id": 1,
-            "company": "광명S&S",
+            "company": { "ko": "광명S&S", "en": "Gwangmyeong S&S" },
             "period": "2025.10 ~ 2026.01",
-            "position": "차장 / 프리랜서",
-            "project": "SK인텔릭스 SCM 대시보드 개발",
-            "description": "SK 인텔릭스 공급망 관리(SCM) 대시보드 시스템 구축 프로젝트입니다.\n- Tableau 기반 데이터 시각화 대시보드를 설계하여 공급망 의사결정 속도 향상에 기여\n- Spring Boot 기반 백엔드 API 연동 및 Oracle DB 쿼리 최적화를 통해 대시보드 로딩 성능 개선",
+            "position": { "ko": "차장 / 프리랜서", "en": "Senior Engineer / Freelance" },
+            "project": { "ko": "SK인텔릭스 SCM 대시보드 개발", "en": "SK Intelix SCM Dashboard Development" },
+            "description": {
+                "ko": "SK 인텔릭스 공급망 관리(SCM) 대시보드 시스템 구축 프로젝트입니다.\n- Tableau 기반 데이터 시각화 대시보드를 설계하여 공급망 의사결정 속도 향상에 기여\n- Spring Boot 기반 백엔드 API 연동 및 Oracle DB 쿼리 최적화를 통해 대시보드 로딩 성능 개선",
+                "en": "Built SCM dashboard system for SK Intelix.\n- Designed Tableau-based data visualization dashboard to improve supply chain decision-making\n- Integrated Spring Boot backend APIs and optimized Oracle DB queries to improve dashboard loading performance"
+            },
             "techStack": [
                 "Java",
                 "Spring Boot",
@@ -72,11 +78,14 @@
         },
         {
             "id": 2,
-            "company": "가치정보기술",
+            "company": { "ko": "가치정보기술", "en": "Gachi Information Technology" },
             "period": "2025.07 ~ 2025.09",
-            "position": "차장 / 프리랜서",
-            "project": "KT 가치제안서 유지보수",
-            "description": "KT 대리점 유무선 상품 설계를 위한 가치제안 시스템 유지보수 업무를 수행했습니다.\n- WebSocket 기반 실시간 양방향 데이터 동기화를 구현하여 대리점 시스템 간 데이터 정합성 확보\n- 클라우드 환경 서비스 안정화로 시스템 가용성 향상",
+            "position": { "ko": "차장 / 프리랜서", "en": "Senior Engineer / Freelance" },
+            "project": { "ko": "KT 가치제안서 유지보수", "en": "KT Value Proposal System Maintenance" },
+            "description": {
+                "ko": "KT 대리점 유무선 상품 설계를 위한 가치제안 시스템 유지보수 업무를 수행했습니다.\n- WebSocket 기반 실시간 양방향 데이터 동기화를 구현하여 대리점 시스템 간 데이터 정합성 확보\n- 클라우드 환경 서비스 안정화로 시스템 가용성 향상",
+                "en": "Maintained value proposal system for KT dealer wired/wireless product configuration.\n- Implemented WebSocket-based real-time bidirectional data synchronization to ensure data consistency across dealer systems\n- Stabilized cloud-hosted services to improve system availability"
+            },
             "techStack": [
                 "Java",
                 "WebSocket",
@@ -86,11 +95,14 @@
         },
         {
             "id": 3,
-            "company": "누리어시스템",
+            "company": { "ko": "누리어시스템", "en": "Nuria System" },
             "period": "2024.12 ~ 2025.06",
-            "position": "차장 / 프리랜서",
-            "project": "삼성전자DS CP 대외협력포털 SI 개발",
-            "description": "삼성전자 DS부문의 대외 협력사를 위한 DSCP 포털 시스템을 개발했습니다.\n- 공통 모듈(메뉴/권한/공통코드/통계) 아키텍처를 설계 및 리드, 전체 시스템의 기반 구조 확립\n- MS Teams 연동, DS 일정/파일관리 등 외부 시스템 인터페이스 4건을 설계·구현\n- Java Spring Boot (DWP) 백엔드 및 Vue.js 프론트엔드 개발",
+            "position": { "ko": "차장 / 프리랜서", "en": "Senior Engineer / Freelance" },
+            "project": { "ko": "삼성전자DS CP 대외협력포털 SI 개발", "en": "Samsung Electronics DS CP External Partner Portal SI Development" },
+            "description": {
+                "ko": "삼성전자 DS부문의 대외 협력사를 위한 DSCP 포털 시스템을 개발했습니다.\n- 공통 모듈(메뉴/권한/공통코드/통계) 아키텍처를 설계 및 리드, 전체 시스템의 기반 구조 확립\n- MS Teams 연동, DS 일정/파일관리 등 외부 시스템 인터페이스 4건을 설계·구현\n- Java Spring Boot (DWP) 백엔드 및 Vue.js 프론트엔드 개발",
+                "en": "Developed DSCP portal for Samsung Electronics DS division's external partners.\n- Architected and led common modules (menu/permissions/codes/statistics), establishing the core system foundation\n- Designed and implemented 4 external system interfaces including MS Teams integration and DS schedule/file management\n- Developed Java Spring Boot (DWP) backend and Vue.js frontend"
+            },
             "techStack": [
                 "Java",
                 "Spring Boot",
@@ -100,11 +112,14 @@
         },
         {
             "id": 4,
-            "company": "엔솔루션스",
+            "company": { "ko": "엔솔루션스", "en": "N Solutions" },
             "period": "2024.04 ~ 2024.10",
-            "position": "차장 / 프리랜서",
-            "project": "세메스 CSS시스템 SI 개발",
-            "description": "반도체 장비 전문 기업 세메스의 CSS(Customer Support System) 웹 시스템을 개발했습니다.\n- 설비 CS 접수~청구까지 End-to-End 업무 프로세스를 설계·구현, 고객 지원 효율화에 기여\n- Java X-UP 프레임워크 기반 백엔드 및 넥사크로 UI 개발",
+            "position": { "ko": "차장 / 프리랜서", "en": "Senior Engineer / Freelance" },
+            "project": { "ko": "세메스 CSS시스템 SI 개발", "en": "Semes CSS System SI Development" },
+            "description": {
+                "ko": "반도체 장비 전문 기업 세메스의 CSS(Customer Support System) 웹 시스템을 개발했습니다.\n- 설비 CS 접수~청구까지 End-to-End 업무 프로세스를 설계·구현, 고객 지원 효율화에 기여\n- Java X-UP 프레임워크 기반 백엔드 및 넥사크로 UI 개발",
+                "en": "Built CSS (Customer Support System) web application for Semes, a semiconductor equipment specialist.\n- Designed and implemented end-to-end CS workflow from ticket intake to billing, improving customer support efficiency\n- Developed Java X-UP framework backend and Nexacro UI"
+            },
             "techStack": [
                 "Java",
                 "Nexacro",
@@ -113,11 +128,14 @@
         },
         {
             "id": 5,
-            "company": "디어소프트",
+            "company": { "ko": "디어소프트", "en": "Dearsoft" },
             "period": "2023.01 ~ 2023.09",
-            "position": "차장 / 프리랜서",
-            "project": "질병관리청 방역통합시스템 SI 개발",
-            "description": "국가 단위 방역 데이터 통합 관리를 위한 웹 시스템 구축 프로젝트에 참여했습니다.\n- 역학조사 데이터 처리 파트를 설계·개발, 대규모 공공 데이터 처리 경험 확보\n- 대용량 Oracle 쿼리 최적화로 데이터 조회 성능 개선\n- JSP 기반 프론트엔드 화면 구현",
+            "position": { "ko": "차장 / 프리랜서", "en": "Senior Engineer / Freelance" },
+            "project": { "ko": "질병관리청 방역통합시스템 SI 개발", "en": "KDCA Integrated Epidemic Prevention System SI Development" },
+            "description": {
+                "ko": "국가 단위 방역 데이터 통합 관리를 위한 웹 시스템 구축 프로젝트에 참여했습니다.\n- 역학조사 데이터 처리 파트를 설계·개발, 대규모 공공 데이터 처리 경험 확보\n- 대용량 Oracle 쿼리 최적화로 데이터 조회 성능 개선\n- JSP 기반 프론트엔드 화면 구현",
+                "en": "Participated in building a national-scale web system for integrated epidemic prevention data management (Korea Disease Control and Prevention Agency).\n- Designed and developed epidemiological investigation data processing module, gaining large-scale public data handling experience\n- Optimized high-volume Oracle queries to improve data retrieval performance\n- Implemented JSP-based frontend screens"
+            },
             "techStack": [
                 "Java",
                 "JSP",
@@ -126,11 +144,14 @@
         },
         {
             "id": 6,
-            "company": "넷믹스",
+            "company": { "ko": "넷믹스", "en": "Netmix" },
             "period": "2022.04 ~ 2022.12",
-            "position": "차장 / 프리랜서",
-            "project": "세메스 품질관리시스템 SI 개발",
-            "description": "세메스 품질관리시스템(QMS)의 수입 및 출하 관리 모듈을 개발했습니다.\n- 수입/출하 검사 관리 모듈을 독립적으로 설계·구현, 품질 추적 체계 구축에 기여\n- 넥사크로 툴을 활용한 사용자 친화적 UI/UX 개발",
+            "position": { "ko": "차장 / 프리랜서", "en": "Senior Engineer / Freelance" },
+            "project": { "ko": "세메스 품질관리시스템 SI 개발", "en": "Semes Quality Management System SI Development" },
+            "description": {
+                "ko": "세메스 품질관리시스템(QMS)의 수입 및 출하 관리 모듈을 개발했습니다.\n- 수입/출하 검사 관리 모듈을 독립적으로 설계·구현, 품질 추적 체계 구축에 기여\n- 넥사크로 툴을 활용한 사용자 친화적 UI/UX 개발",
+                "en": "Developed incoming and outgoing inspection management modules for Semes QMS.\n- Independently designed and implemented import/export inspection management modules, contributing to a robust quality tracking system\n- Built user-friendly UI/UX using Nexacro"
+            },
             "techStack": [
                 "Java",
                 "Nexacro",
@@ -139,11 +160,14 @@
         },
         {
             "id": 7,
-            "company": "오픈에스지",
+            "company": { "ko": "오픈에스지", "en": "OpenSG" },
             "period": "2020.08 ~ 2022.03",
-            "position": "차장 / 프리랜서",
-            "project": "삼성전자DS 스마트인터락 SI 개발",
-            "description": "삼성전자 DS 8대 공정 라인의 실시간 설비 상태 모니터링 시스템을 설계·구축했습니다.\n- 실시간 JSON API 설계로 설비 인터락 대응 시간 단축에 기여\n- Spring Framework 기반 웹 서버 구성 및 Oracle DB 연동\n- 약 1년 7개월간 장기 참여하며 안정적 운영 및 지속적 기능 확장 담당",
+            "position": { "ko": "차장 / 프리랜서", "en": "Senior Engineer / Freelance" },
+            "project": { "ko": "삼성전자DS 스마트인터락 SI 개발", "en": "Samsung Electronics DS Smart Interlock SI Development" },
+            "description": {
+                "ko": "삼성전자 DS 8대 공정 라인의 실시간 설비 상태 모니터링 시스템을 설계·구축했습니다.\n- 실시간 JSON API 설계로 설비 인터락 대응 시간 단축에 기여\n- Spring Framework 기반 웹 서버 구성 및 Oracle DB 연동\n- 약 1년 7개월간 장기 참여하며 안정적 운영 및 지속적 기능 확장 담당",
+                "en": "Designed and built real-time equipment status monitoring system for 8 Samsung Electronics DS process lines.\n- Designed real-time JSON APIs to reduce equipment interlock response time\n- Configured Spring Framework web server and integrated Oracle DB\n- Long-term engagement (~19 months) covering stable operations and continuous feature enhancements"
+            },
             "techStack": [
                 "Java",
                 "Spring Framework",
@@ -153,11 +177,14 @@
         },
         {
             "id": 8,
-            "company": "시큐레이어",
+            "company": { "ko": "시큐레이어", "en": "SecuLayer" },
             "period": "2019.03 ~ 2020.05",
-            "position": "차장",
-            "project": "보안 관제 처리 웹 개발",
-            "description": "통일부 및 감사원 보안 관제 실황판 대시보드 구축 및 국가정보관리원 보안 솔루션을 유지보수했습니다.\n- 레거시 시스템에 Vue.js를 선제 도입(Spearheaded adoption), 컴포넌트 기반 아키텍처로 전환하여 유지보수성 향상\n- Vuex 상태 관리 및 Router 적용으로 UX 개선\n- GitHub/Trello 도입으로 팀 협업 프로세스를 체계화 (형상관리, 이슈 트래킹)",
+            "position": { "ko": "차장", "en": "Senior Engineer" },
+            "project": { "ko": "보안 관제 처리 웹 개발", "en": "Security Operations Center Web Development" },
+            "description": {
+                "ko": "통일부 및 감사원 보안 관제 실황판 대시보드 구축 및 국가정보관리원 보안 솔루션을 유지보수했습니다.\n- 레거시 시스템에 Vue.js를 선제 도입(Spearheaded adoption), 컴포넌트 기반 아키텍처로 전환하여 유지보수성 향상\n- Vuex 상태 관리 및 Router 적용으로 UX 개선\n- GitHub/Trello 도입으로 팀 협업 프로세스를 체계화 (형상관리, 이슈 트래킹)",
+                "en": "Built security operations dashboards for the Ministry of Unification and Board of Audit and Inspection, and maintained security solutions for the National Intelligence Service.\n- Spearheaded Vue.js adoption on legacy systems, migrating to component-based architecture to improve maintainability\n- Enhanced UX by introducing Vuex state management and Vue Router\n- Standardized team collaboration by introducing GitHub and Trello for version control and issue tracking"
+            },
             "techStack": [
                 "Java",
                 "Vue.js",
@@ -167,11 +194,14 @@
         },
         {
             "id": 9,
-            "company": "에버원소프트",
+            "company": { "ko": "에버원소프트", "en": "Everwon Soft" },
             "period": "2018.07 ~ 2019.02",
-            "position": "차장 / 프리랜서",
-            "project": "엔지니어 포털 SI 개발",
-            "description": "삼성 디스플레이(OLED) 엔지니어 부서를 위한 불량 정보 계측 및 차트 시각화 웹 애플리케이션을 개발했습니다.\n- OLED 불량 계측 데이터를 인터랙티브 차트로 시각화, 엔지니어의 데이터 분석 효율 향상\n- Angular 6 + Spring Framework 기반 풀스택 개발 및 JSON 데이터 통신 구현",
+            "position": { "ko": "차장 / 프리랜서", "en": "Senior Engineer / Freelance" },
+            "project": { "ko": "엔지니어 포털 SI 개발", "en": "Engineer Portal SI Development" },
+            "description": {
+                "ko": "삼성 디스플레이(OLED) 엔지니어 부서를 위한 불량 정보 계측 및 차트 시각화 웹 애플리케이션을 개발했습니다.\n- OLED 불량 계측 데이터를 인터랙티브 차트로 시각화, 엔지니어의 데이터 분석 효율 향상\n- Angular 6 + Spring Framework 기반 풀스택 개발 및 JSON 데이터 통신 구현",
+                "en": "Developed defect measurement and chart visualization web application for Samsung Display (OLED) engineering teams.\n- Visualized OLED defect measurement data as interactive charts, improving engineers' data analysis efficiency\n- Delivered full-stack development using Angular 6 + Spring Framework with JSON-based data communication"
+            },
             "techStack": [
                 "Java",
                 "Angular",
@@ -180,11 +210,14 @@
         },
         {
             "id": 10,
-            "company": "아그릭스",
+            "company": { "ko": "아그릭스", "en": "Agrix" },
             "period": "2016.02 ~ 2017.12",
-            "position": "과장",
-            "project": "쇼핑몰 웹 개발 & 운영",
-            "description": "농자재 전문 쇼핑몰의 기획~운영까지 전 과정을 1인 리드했습니다.\n- Spring Boot, JPA, Thymeleaf 도입으로 개발 기간 단축 및 기술 스택 현대화 주도\n- DB 설계 및 클래스 구조화를 리딩하여 유지보수 용이한 아키텍처 구축",
+            "position": { "ko": "과장", "en": "Manager" },
+            "project": { "ko": "쇼핑몰 웹 개발 & 운영", "en": "E-Commerce Web Development & Operations" },
+            "description": {
+                "ko": "농자재 전문 쇼핑몰의 기획~운영까지 전 과정을 1인 리드했습니다.\n- Spring Boot, JPA, Thymeleaf 도입으로 개발 기간 단축 및 기술 스택 현대화 주도\n- DB 설계 및 클래스 구조화를 리딩하여 유지보수 용이한 아키텍처 구축",
+                "en": "Solo-led the full lifecycle of an agricultural supplies e-commerce platform from planning through production.\n- Drove technology modernization by introducing Spring Boot, JPA, and Thymeleaf, reducing development time\n- Led DB design and class architecture to establish a maintainable codebase"
+            },
             "techStack": [
                 "Java",
                 "Spring Boot",
@@ -194,11 +227,14 @@
         },
         {
             "id": 11,
-            "company": "시스트란인터네셔널",
+            "company": { "ko": "시스트란인터네셔널", "en": "SYSTRAN International" },
             "period": "2015.01 ~ 2016.01",
-            "position": "과장",
-            "project": "기계번역 솔루션 개발",
-            "description": "기계번역 솔루션 유지보수 및 포스코 연구 과제 개발에 참여했습니다.\n- D3.js 라이브러리를 활용하여 특허 침해 판단 결과를 시각적으로 표현하는 웹 애플리케이션 개발",
+            "position": { "ko": "과장", "en": "Manager" },
+            "project": { "ko": "기계번역 솔루션 개발", "en": "Machine Translation Solution Development" },
+            "description": {
+                "ko": "기계번역 솔루션 유지보수 및 포스코 연구 과제 개발에 참여했습니다.\n- D3.js 라이브러리를 활용하여 특허 침해 판단 결과를 시각적으로 표현하는 웹 애플리케이션 개발",
+                "en": "Maintained machine translation solutions and contributed to a POSCO research project.\n- Developed a web application using D3.js to visually represent patent infringement analysis results"
+            },
             "techStack": [
                 "Java",
                 "Spring Framework",
@@ -207,11 +243,14 @@
         },
         {
             "id": 12,
-            "company": "브리지텍",
+            "company": { "ko": "브리지텍", "en": "Bridgetec" },
             "period": "2013.05 ~ 2014.10",
-            "position": "대리",
-            "project": "콜센터 솔루션 개발",
-            "description": "자사 콜센터 제품군을 통합 관리하는 웹 솔루션을 개발했습니다.\n- 전자정부 프레임워크 기반 웹 서버 구축\n- C++ 교환기/녹취 서버와 소켓/API 통신 연동 모듈 개발",
+            "position": { "ko": "대리", "en": "Assistant Manager" },
+            "project": { "ko": "콜센터 솔루션 개발", "en": "Call Center Solution Development" },
+            "description": {
+                "ko": "자사 콜센터 제품군을 통합 관리하는 웹 솔루션을 개발했습니다.\n- 전자정부 프레임워크 기반 웹 서버 구축\n- C++ 교환기/녹취 서버와 소켓/API 통신 연동 모듈 개발",
+                "en": "Developed web solution to centrally manage the company's call center product suite.\n- Built web server based on eGovFramework\n- Developed socket/API communication integration modules with C++ PBX and recording servers"
+            },
             "techStack": [
                 "Java",
                 "Spring Framework",
@@ -221,11 +260,14 @@
         },
         {
             "id": 13,
-            "company": "카이런소프트",
+            "company": { "ko": "카이런소프트", "en": "Cairensoft" },
             "period": "2011.05 ~ 2013.02",
-            "position": "대리",
-            "project": "SI 웹 개발 & GUI",
-            "description": "KISTI 슈퍼컴퓨팅 머신 제어 GUI 및 홈네트워크 표준화 서버를 개발했습니다.\n- Linux C++ 서버 개발 및 Java RCP 기반 데스크탑 애플리케이션 개발\n- Spring Framework 기반 웹 서비스 구현",
+            "position": { "ko": "대리", "en": "Assistant Manager" },
+            "project": { "ko": "SI 웹 개발 & GUI", "en": "SI Web Development & GUI" },
+            "description": {
+                "ko": "KISTI 슈퍼컴퓨팅 머신 제어 GUI 및 홈네트워크 표준화 서버를 개발했습니다.\n- Linux C++ 서버 개발 및 Java RCP 기반 데스크탑 애플리케이션 개발\n- Spring Framework 기반 웹 서비스 구현",
+                "en": "Developed KISTI supercomputing machine control GUI and home network standardization server.\n- Built Linux C++ server and Java RCP-based desktop application\n- Implemented Spring Framework-based web services"
+            },
             "techStack": [
                 "Java",
                 "Spring Framework",
@@ -235,11 +277,14 @@
         },
         {
             "id": 14,
-            "company": "클루닉스",
+            "company": { "ko": "클루닉스", "en": "Clunix" },
             "period": "2009.10 ~ 2011.04",
-            "position": "연구원",
-            "project": "클라우드 시스템 웹 GUI 개발",
-            "description": "클라우드 컴퓨팅 머신 제어 및 상태 모니터링을 위한 웹 GUI를 개발했습니다.\n- C언어 기반 시스템 데몬 프로그램 개발\n- PHP 웹 관리 인터페이스 구현",
+            "position": { "ko": "연구원", "en": "Junior Engineer" },
+            "project": { "ko": "클라우드 시스템 웹 GUI 개발", "en": "Cloud System Web GUI Development" },
+            "description": {
+                "ko": "클라우드 컴퓨팅 머신 제어 및 상태 모니터링을 위한 웹 GUI를 개발했습니다.\n- C언어 기반 시스템 데몬 프로그램 개발\n- PHP 웹 관리 인터페이스 구현",
+                "en": "Developed web GUI for cloud computing machine control and status monitoring.\n- Developed system daemon programs in C\n- Implemented PHP-based web administration interface"
+            },
             "techStack": [
                 "C",
                 "PHP",
@@ -249,40 +294,49 @@
     ],
     "education": [
         {
-            "school": "충남대학교",
-            "major": "컴퓨터공학과",
+            "school": { "ko": "충남대학교", "en": "Chungnam National University" },
+            "major": { "ko": "컴퓨터공학과", "en": "Computer Science" },
             "period": "2009년 02월 졸업"
         },
         {
-            "school": "보문고등학교",
-            "major": "이과",
+            "school": { "ko": "보문고등학교", "en": "Bomun High School" },
+            "major": { "ko": "이과", "en": "Science" },
             "period": "2001년 02월 졸업"
         }
     ],
     "certifications": [
         {
-            "name": "정보처리기사",
+            "name": { "ko": "정보처리기사", "en": "Engineer Information Processing" },
             "date": "2011.09"
         },
         {
-            "name": "SCJP",
+            "name": { "ko": "SCJP", "en": "SCJP" },
             "date": "2007.07"
         }
     ],
     "personalProjects": [
         {
             "name": "Resume",
-            "description": "Vue 3 + Tailwind CSS + Fastify + MongoDB 기반 개인 이력서 웹 애플리케이션. Reddit 스타일 UI/UX.",
+            "description": {
+                "ko": "Vue 3 + Tailwind CSS + Fastify + MongoDB 기반 개인 이력서 웹 애플리케이션. Reddit 스타일 UI/UX.",
+                "en": "Personal resume web application built with Vue 3, Tailwind CSS, Fastify, and MongoDB. Reddit-inspired UI/UX."
+            },
             "link": "https://github.com/kocjun/resume"
         },
         {
             "name": "AI Stock",
-            "description": "Python 기반 AI 주식 분석 프로젝트.",
+            "description": {
+                "ko": "Python 기반 AI 주식 분석 프로젝트.",
+                "en": "AI-powered stock analysis project built with Python."
+            },
             "link": "https://github.com/kocjun/ai-stock"
         },
         {
             "name": "Learn Kafka",
-            "description": "Kafka, 이벤트 기반 MSA 백엔드, Docker 등 학습용 프로젝트.",
+            "description": {
+                "ko": "Kafka, 이벤트 기반 MSA 백엔드, Docker 등 학습용 프로젝트.",
+                "en": "Learning project covering Kafka, event-driven MSA backend architecture, and Docker."
+            },
             "link": "https://github.com/kocjun/learn-kafka"
         }
     ]

@@ -1,10 +1,15 @@
 <script setup>
-import { 
-  CommandLineIcon, 
-  ComputerDesktopIcon, 
-  CircleStackIcon, 
-  WrenchScrewdriverIcon 
+import { useI18n } from 'vue-i18n'
+import { useLocalized } from '../composables/useLocalized.js'
+import {
+  CommandLineIcon,
+  ComputerDesktopIcon,
+  CircleStackIcon,
+  WrenchScrewdriverIcon
 } from '@heroicons/vue/24/outline'
+
+const { t } = useI18n()
+const { localized } = useLocalized()
 
 const props = defineProps({
   skills: {
@@ -40,7 +45,7 @@ const getGradientClass = (index) => {
 <template>
   <div class="bg-reddit-gray rounded-md border border-reddit-border overflow-hidden">
     <div class="bg-reddit-gray p-3 border-b border-reddit-border flex items-center justify-between">
-       <h2 class="text-sm font-bold text-reddit-text uppercase tracking-wide">About Skills</h2>
+       <h2 class="text-sm font-bold text-reddit-text uppercase tracking-wide">{{ t('skills.title') }}</h2>
        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 text-reddit-text-secondary">
           <path stroke-linecap="round" stroke-linejoin="round" d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
        </svg>
@@ -51,7 +56,7 @@ const getGradientClass = (index) => {
          <div class="flex items-center gap-2 mb-2">
             <!-- Simple colored dot instead of full icon for cleaner sidebar look, or keep small icon -->
             <div class="w-2 h-2 rounded-full bg-reddit-text-secondary"></div>
-            <h3 class="text-sm font-bold text-reddit-text">{{ category.category }}</h3>
+            <h3 class="text-sm font-bold text-reddit-text">{{ localized(category.category) }}</h3>
          </div>
          <div class="flex flex-wrap gap-1.5">
            <span v-for="item in category.items" :key="item"

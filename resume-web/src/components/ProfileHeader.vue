@@ -1,4 +1,10 @@
 <script setup>
+import { useI18n } from 'vue-i18n'
+import { useLocalized } from '../composables/useLocalized.js'
+
+const { t } = useI18n()
+const { localized } = useLocalized()
+
 defineProps({
   profile: {
     type: Object,
@@ -30,36 +36,36 @@ defineProps({
       <!-- Header Actions (Right side) -->
       <div class="flex justify-end pt-3 mb-2 md:mb-0 gap-2">
          <a :href="'mailto:' + profile.email" class="px-6 py-1.5 rounded-full bg-reddit-text text-black font-bold text-sm hover:opacity-90 transition-opacity flex items-center justify-center">
-            Contact Me
+            {{ t('profile.contactMe') }}
          </a>
       </div>
 
       <!-- Text Info -->
       <div class="mt-4 md:mt-2">
          <h1 class="text-2xl md:text-3xl font-bold text-reddit-text mb-1 flex items-center gap-2">
-            {{ profile.name }}
-            <span class="text-xs font-normal border border-reddit-text text-reddit-text px-1 rounded">MOD</span>
+            {{ localized(profile.name) }}
+            <span class="text-xs font-normal border border-reddit-text text-reddit-text px-1 rounded">{{ t('profile.mod') }}</span>
          </h1>
          <h2 class="text-sm text-reddit-text-secondary font-medium mb-4">
-            {{ profile.role }}
+            {{ localized(profile.role) }}
          </h2>
-         
+
          <div class="text-sm text-reddit-text space-y-2">
-            <p>{{ profile.summary }}</p>
+            <p>{{ localized(profile.summary) }}</p>
          </div>
 
          <div class="flex flex-wrap gap-4 mt-6 text-sm font-bold text-reddit-text-secondary">
              <div class="flex flex-col">
-                <span class="text-reddit-text">15y</span>
-                <span class="font-normal text-xs">Experience</span>
+                <span class="text-reddit-text">{{ t('profile.experienceYears') }}</span>
+                <span class="font-normal text-xs">{{ t('profile.experienceLabel') }}</span>
              </div>
              <div class="flex flex-col">
-                <span class="text-reddit-text">10+</span>
-                <span class="font-normal text-xs">Projects</span>
+                <span class="text-reddit-text">{{ t('profile.projectCount') }}</span>
+                <span class="font-normal text-xs">{{ t('profile.projectsLabel') }}</span>
              </div>
              <div class="flex md:hidden lg:flex flex-col">
                 <span class="text-reddit-text">{{ profile.email }}</span>
-                <span class="font-normal text-xs">Email</span>
+                <span class="font-normal text-xs">{{ t('profile.emailLabel') }}</span>
              </div>
          </div>
       </div>

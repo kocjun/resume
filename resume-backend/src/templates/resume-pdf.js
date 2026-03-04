@@ -2,12 +2,33 @@
  * LinkedIn 스타일 이력서 PDF HTML 템플릿
  * resume 데이터를 받아 완성된 HTML 문자열을 반환
  */
-export function renderResumePDF(resume) {
+
+/**
+ * Localized field 값 추출
+ * { ko: '...', en: '...' } → lang에 해당하는 값, fallback to ko
+ * String → 그대로 반환
+ */
+function L(field, lang = 'ko') {
+  if (!field) return '';
+  if (typeof field === 'string') return field;
+  if (typeof field === 'object' && (field.ko || field.en)) {
+    return field[lang] || field.ko || '';
+  }
+  return String(field);
+}
+
+const SECTION_TITLES = {
+  ko: { skills: '스킬', experience: '경력사항', education: '학력', certifications: '자격증', projects: '개인 프로젝트' },
+  en: { skills: 'Skills', experience: 'Experience', education: 'Education', certifications: 'Certifications', projects: 'Personal Projects' },
+};
+
+export function renderResumePDF(resume, lang = 'ko') {
   const { profile, skills, experience, education, certifications, personalProjects } = resume;
+  const t = SECTION_TITLES[lang] || SECTION_TITLES.ko;
 
   const skillsHTML = (skills || []).map(skill => `
     <div class="skill-group">
-      <span class="skill-category">${escapeHtml(skill.category)}</span>
+      <span class="skill-category">${escapeHtml(L(skill.category, lang))}</span>
       <div class="skill-items">
         ${(skill.items || []).map(item => `<span class="skill-tag">${escapeHtml(item)}</span>`).join('')}
       </div>
@@ -25,12 +46,12 @@ export function renderResumePDF(resume) {
     <div class="experience-item">
       <div class="exp-header">
         <div>
-          <h3 class="exp-project">${escapeHtml(exp.project || '')}</h3>
-          <p class="exp-company">${escapeHtml(exp.company || '')}${exp.position ? ` | ${escapeHtml(exp.position)}` : ''}</p>
+          <h3 class="exp-project">${escapeHtml(L(exp.project, lang) || '')}</h3>
+          <p class="exp-company">${escapeHtml(L(exp.company, lang) || '')}${exp.position ? ` | ${escapeHtml(L(exp.position, lang))}` : ''}</p>
         </div>
         <span class="exp-period">${escapeHtml(exp.period || '')}</span>
       </div>
-      ${exp.description ? `<p class="exp-description">${escapeHtml(exp.description)}</p>` : ''}
+      ${exp.description ? `<p class="exp-description">${escapeHtml(L(exp.description, lang))}</p>` : ''}
       ${(exp.techStack && exp.techStack.length > 0) ? `
         <div class="tech-stack">
           ${exp.techStack.map(t => `<span class="tech-tag">${escapeHtml(t)}</span>`).join('')}
@@ -42,10 +63,10 @@ export function renderResumePDF(resume) {
   const educationHTML = (education || []).map(edu => `
     <div class="education-item">
       <div class="edu-header">
-        <h3>${escapeHtml(edu.school || '')}</h3>
+        <h3>${escapeHtml(L(edu.school, lang) || '')}</h3>
         <span class="edu-period">${escapeHtml(edu.period || '')}</span>
       </div>
-      ${edu.major ? `<p class="edu-major">${escapeHtml(edu.major)}</p>` : ''}
+      ${edu.major ? `<p class="edu-major">${escapeHtml(L(edu.major, lang))}</p>` : ''}
     </div>
   `).join('');
 
@@ -55,19 +76,19 @@ export function renderResumePDF(resume) {
         <h3 class="project-name">${escapeHtml(proj.name || '')}</h3>
         ${proj.link ? `<a class="project-link" href="${escapeHtml(proj.link)}">${escapeHtml(proj.link)}</a>` : ''}
       </div>
-      ${proj.description ? `<p class="project-desc">${escapeHtml(proj.description)}</p>` : ''}
+      ${proj.description ? `<p class="project-desc">${escapeHtml(L(proj.description, lang))}</p>` : ''}
     </div>
   `).join('');
 
   const certificationsHTML = (certifications || []).map(cert => `
     <div class="cert-item">
-      <span class="cert-name">${escapeHtml(cert.name || '')}</span>
+      <span class="cert-name">${escapeHtml(L(cert.name, lang) || '')}</span>
       ${cert.date ? `<span class="cert-date">${escapeHtml(cert.date)}</span>` : ''}
     </div>
   `).join('');
 
   return `<!DOCTYPE html>
-<html lang="ko">
+<html lang="${lang}">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -316,50 +337,50 @@ export function renderResumePDF(resume) {
 <body>
   <div class="container">
     <div class="header">
-      <h1>${escapeHtml(profile.name || '')}</h1>
-      <div class="role">${escapeHtml(profile.role || '')}</div>
+      <h1>${escapeHtml(L(profile.name, lang) || '')}</h1>
+      <div class="role">${escapeHtml(L(profile.role, lang) || '')}</div>
       <div class="contact-info">
         ${profile.email ? `<span>${escapeHtml(profile.email)}</span>` : ''}
         ${profile.phone ? `<span>${escapeHtml(profile.phone)}</span>` : ''}
-        ${profile.address ? `<span>${escapeHtml(profile.address)}</span>` : ''}
+        ${profile.address ? `<span>${escapeHtml(L(profile.address, lang))}</span>` : ''}
       </div>
     </div>
 
     ${profile.summary ? `
-    <div class="summary">${escapeHtml(profile.summary)}</div>
+    <div class="summary">${escapeHtml(L(profile.summary, lang))}</div>
     ` : ''}
 
     ${skillsHTML ? `
     <div class="section">
-      <h2 class="section-title">Skills</h2>
+      <h2 class="section-title">${t.skills}</h2>
       ${skillsHTML}
     </div>
     ` : ''}
 
     ${experienceHTML ? `
     <div class="section">
-      <h2 class="section-title">Experience</h2>
+      <h2 class="section-title">${t.experience}</h2>
       ${experienceHTML}
     </div>
     ` : ''}
 
     ${educationHTML ? `
     <div class="section">
-      <h2 class="section-title">Education</h2>
+      <h2 class="section-title">${t.education}</h2>
       ${educationHTML}
     </div>
     ` : ''}
 
     ${certificationsHTML ? `
     <div class="section">
-      <h2 class="section-title">Certifications</h2>
+      <h2 class="section-title">${t.certifications}</h2>
       ${certificationsHTML}
     </div>
     ` : ''}
 
     ${projectsHTML ? `
     <div class="section">
-      <h2 class="section-title">Personal Projects</h2>
+      <h2 class="section-title">${t.projects}</h2>
       ${projectsHTML}
     </div>
     ` : ''}

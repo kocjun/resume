@@ -1,0 +1,75 @@
+{
+  "nav": {
+    "resume": "Resume",
+    "jobs": "Jobs",
+    "login": "Log In",
+    "logout": "Logout"
+  },
+  "profile": {
+    "contactMe": "Contact Me",
+    "mod": "MOD",
+    "experienceYears": "15y",
+    "experienceLabel": "Experience",
+    "projectCount": "10+",
+    "projectsLabel": "Projects",
+    "emailLabel": "Email"
+  },
+  "skills": {
+    "title": "About Skills"
+  },
+  "experience": {
+    "createPost": "Create Post",
+    "edit": "Edit",
+    "delete": "Delete",
+    "copy": "Copy",
+    "copied": "Copied!",
+    "editTitle": "Edit Experience",
+    "createTitle": "Create Experience",
+    "noResults": "No results found.",
+    "noResultsHint": "Try a different tag.",
+    "searchTag": "Search Tag",
+    "count": "{n} results"
+  },
+  "form": {
+    "company": "Company",
+    "position": "Position",
+    "projectName": "Project Name",
+    "period": "Period",
+    "description": "Description",
+    "techStack": "Tech Stack",
+    "addTech": "Add tech (Press Enter)",
+    "cancel": "Cancel",
+    "saveChanges": "Save Changes",
+    "create": "Create",
+    "companyPlaceholder": "e.g. Samsung Electronics",
+    "positionPlaceholder": "e.g. Senior Developer",
+    "projectPlaceholder": "e.g. SCM Dashboard System",
+    "periodPlaceholder": "e.g. 2023.01 ~ 2024.12",
+    "descriptionPlaceholder": "Describe your role and achievements..."
+  },
+  "projects": {
+    "title": "Personal Projects"
+  },
+  "login": {
+    "title": "Log In",
+    "email": "Email",
+    "password": "Password",
+    "emailPlaceholder": "Enter your email",
+    "submit": "Log In",
+    "submitting": "Logging in..."
+  },
+  "pdf": {
+    "download": "PDF Download",
+    "generating": "Generating PDF..."
+  },
+  "confirm": {
+    "deletePost": "Delete post \"{project}\"?"
+  },
+  "common": {
+    "loading": "Loading resume data...",
+    "errorTitle": "Failed to Load Data",
+    "errorFallback": "Showing fallback data from local file.",
+    "userAgreement": "User Agreement",
+    "privacyPolicy": "Privacy Policy"
+  }
+}
