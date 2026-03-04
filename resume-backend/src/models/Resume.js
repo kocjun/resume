@@ -1,16 +1,23 @@
 import mongoose from 'mongoose';
 
 /**
+ * 다국어(한/영) 문자열 또는 plain String을 모두 수용하는 Mixed 타입 정의
+ * 예: "홍길동" 또는 { ko: "홍길동", en: "Hong Gil-dong" }
+ */
+const LocalizedString = { type: mongoose.Schema.Types.Mixed };
+const LocalizedStringRequired = { type: mongoose.Schema.Types.Mixed, required: true };
+
+/**
  * 프로필 스키마
  */
 const profileSchema = new mongoose.Schema(
   {
-    name: { type: String, required: true },
-    role: { type: String, required: true },
+    name: LocalizedStringRequired,
+    role: LocalizedStringRequired,
     email: { type: String, required: true },
     phone: String,
-    address: String,
-    summary: String,
+    address: LocalizedString,
+    summary: LocalizedString,
   },
   { _id: false }
 );
@@ -20,7 +27,7 @@ const profileSchema = new mongoose.Schema(
  */
 const skillCategorySchema = new mongoose.Schema(
   {
-    category: { type: String, required: true },
+    category: LocalizedStringRequired,
     items: [String],
   },
   { _id: false }
@@ -30,11 +37,11 @@ const skillCategorySchema = new mongoose.Schema(
  * 경력 스키마
  */
 const experienceSchema = new mongoose.Schema({
-  company: { type: String, required: true },
+  company: LocalizedStringRequired,
   period: { type: String, required: true },
-  position: String,
-  project: { type: String, required: true },
-  description: String,
+  position: LocalizedString,
+  project: LocalizedStringRequired,
+  description: LocalizedString,
   techStack: [String],
 });
 
@@ -43,8 +50,8 @@ const experienceSchema = new mongoose.Schema({
  */
 const educationSchema = new mongoose.Schema(
   {
-    school: { type: String, required: true },
-    major: String,
+    school: LocalizedStringRequired,
+    major: LocalizedString,
     period: String,
   },
   { _id: false }
@@ -55,7 +62,7 @@ const educationSchema = new mongoose.Schema(
  */
 const certificationSchema = new mongoose.Schema(
   {
-    name: { type: String, required: true },
+    name: LocalizedStringRequired,
     date: String,
   },
   { _id: false }
