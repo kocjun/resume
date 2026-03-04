@@ -186,14 +186,14 @@ export const resumeApi = {
   /**
    * PDF 다운로드
    */
-  downloadPDF: async () => {
+  downloadPDF: async (lang = 'ko') => {
     const token = getToken();
     const headers = {};
     if (token) {
       headers['Authorization'] = `Bearer ${token}`;
     }
 
-    const response = await fetch(`${API_BASE}/resume/pdf`, { headers });
+    const response = await fetch(`${API_BASE}/resume/pdf?lang=${lang}`, { headers });
 
     if (!response.ok) {
       const error = await response.json().catch(() => ({}));
