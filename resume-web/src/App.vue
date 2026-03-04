@@ -1,10 +1,17 @@
 <script setup>
 import { ref, provide, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
+import { useI18n } from 'vue-i18n'
 import { authApi } from './api/client.js'
 import LoginModal from './components/LoginModal.vue'
 
 const route = useRoute()
+const { locale, t } = useI18n()
+
+const toggleLocale = () => {
+  locale.value = locale.value === 'ko' ? 'en' : 'ko'
+  localStorage.setItem('locale', locale.value)
+}
 
 const isAuthenticated = ref(false)
 const showLoginModal = ref(false)
@@ -78,17 +85,22 @@ const handleLogout = () => {
 
        <div class="flex items-center gap-4">
          <button
+           @click="toggleLocale"
+           class="px-3 py-1.5 rounded-full text-sm font-bold border border-reddit-border text-reddit-text-secondary hover:text-white hover:border-white transition-colors">
+           {{ locale === 'ko' ? 'EN' : 'KO' }}
+         </button>
+         <button
            v-if="!isAuthenticated"
            @click="handleLogin"
            class="bg-reddit-orange hover:opacity-90 text-white rounded-full px-5 py-1.5 font-bold text-sm transition-opacity">
-           Log In
+           {{ t('nav.login') }}
          </button>
          <div v-else class="flex items-center gap-3">
            <span class="text-reddit-text-secondary text-sm hidden sm:inline">{{ userEmail }}</span>
            <button
              @click="handleLogout"
              class="text-reddit-text-secondary hover:text-white text-sm transition-colors">
-             Logout
+             {{ t('nav.logout') }}
            </button>
          </div>
        </div>

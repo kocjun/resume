@@ -1,11 +1,16 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useLocalized } from '../composables/useLocalized.js'
 import {
   ClipboardDocumentIcon,
   ClipboardDocumentCheckIcon,
   PencilSquareIcon,
   TrashIcon
 } from '@heroicons/vue/24/outline'
+
+const { t } = useI18n()
+const { localized } = useLocalized()
 
 const props = defineProps({
   experience: {
@@ -31,10 +36,10 @@ const copied = ref(false)
 const copyToClipboard = async () => {
   const exp = props.experience
   const text = [
-    `[${exp.company}] ${exp.project}`,
-    exp.position ? `${exp.position} | ${exp.period}` : exp.period,
+    `[${localized(exp.company)}] ${localized(exp.project)}`,
+    exp.position ? `${localized(exp.position)} | ${exp.period}` : exp.period,
     '',
-    exp.description,
+    localized(exp.description),
     '',
     `Tech: ${exp.techStack?.join(', ') || ''}`,
   ].join('\n')
@@ -84,7 +89,7 @@ onUnmounted(() => {
           </div>
           <span class="font-bold text-reddit-text hover:underline">{{ experience.period }}</span>
           <span class="text-xs">•</span>
-          <span class="hover:underline">{{ experience.company }}</span>
+          <span class="hover:underline">{{ localized(experience.company) }}</span>
           
           <!-- Action Buttons -->
           <div class="flex items-center ml-auto">
@@ -93,7 +98,7 @@ onUnmounted(() => {
                     :class="copied ? 'text-green-400' : 'text-reddit-text-secondary hover:text-reddit-text'">
               <ClipboardDocumentCheckIcon v-if="copied" class="w-5 h-5" />
               <ClipboardDocumentIcon v-else class="w-5 h-5" />
-              <span class="text-xs font-bold">{{ copied ? 'Copied!' : 'Copy' }}</span>
+              <span class="text-xs font-bold">{{ copied ? t('experience.copied') : t('experience.copy') }}</span>
             </button>
             
             <!-- Edit Button (Only visible when authenticated) -->
@@ -101,7 +106,7 @@ onUnmounted(() => {
                     @click.stop="$emit('edit', experience)"
                     class="flex items-center gap-1 hover:bg-[#272729] px-2 py-1 rounded text-reddit-text-secondary hover:text-reddit-text transition-colors">
               <PencilSquareIcon class="w-5 h-5" />
-              <span class="text-xs font-bold">Edit</span>
+              <span class="text-xs font-bold">{{ t('experience.edit') }}</span>
             </button>
 
             <!-- Delete Button (Only visible when authenticated) -->
@@ -109,19 +114,19 @@ onUnmounted(() => {
                     @click.stop="$emit('delete', experience)"
                     class="flex items-center gap-1 hover:bg-[#272729] px-2 py-1 rounded text-reddit-text-secondary hover:text-red-400 transition-colors">
               <TrashIcon class="w-5 h-5" />
-              <span class="text-xs font-bold">Delete</span>
+              <span class="text-xs font-bold">{{ t('experience.delete') }}</span>
             </button>
           </div>
        </div>
 
        <!-- Title -->
        <h3 class="text-xl md:text-2xl font-medium text-reddit-text mb-3 leading-snug">
-          {{ experience.project }} <span class="text-sm font-normal text-reddit-text-secondary ml-2 border border-reddit-border px-2 py-0.5 rounded align-middle">{{ experience.position }}</span>
+          {{ localized(experience.project) }} <span class="text-sm font-normal text-reddit-text-secondary ml-2 border border-reddit-border px-2 py-0.5 rounded align-middle">{{ localized(experience.position) }}</span>
        </h3>
 
        <!-- Body -->
        <div class="text-sm md:text-base text-reddit-text mb-4 leading-relaxed font-light whitespace-pre-line">
-         {{ experience.description }}
+         {{ localized(experience.description) }}
        </div>
 
        <!-- Flair / Chips -->

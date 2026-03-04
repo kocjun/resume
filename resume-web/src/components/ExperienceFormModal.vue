@@ -1,6 +1,9 @@
 <script setup>
 import { ref, watch, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { XMarkIcon, PlusIcon } from '@heroicons/vue/24/outline'
+
+const { t } = useI18n()
 
 const props = defineProps({
   experience: {
@@ -96,7 +99,7 @@ const handleSubmit = () => {
         <!-- Header -->
         <div class="flex items-center justify-between p-4 border-b border-reddit-border bg-[#1A1A1B]">
            <h2 class="text-lg font-medium text-reddit-text">
-             {{ experience ? 'Edit Experience' : 'Create Experience' }}
+             {{ experience ? t('experience.editTitle') : t('experience.createTitle') }}
            </h2>
            <button class="text-reddit-text-secondary hover:text-white rounded-full p-1" @click="$emit('close')">
               <XMarkIcon class="w-6 h-6" />
@@ -108,51 +111,51 @@ const handleSubmit = () => {
            <!-- Company & Position -->
            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label class="block text-xs font-bold text-reddit-text-secondary uppercase mb-1">Company</label>
-                <input v-model="form.company" type="text" 
+                <label class="block text-xs font-bold text-reddit-text-secondary uppercase mb-1">{{ t('form.company') }}</label>
+                <input v-model="form.company" type="text"
                        class="w-full bg-[#272729] border border-reddit-border rounded px-3 py-2 text-reddit-text focus:outline-none focus:border-white transition-colors"
-                       placeholder="e.g. Samsung Electronics" />
+                       :placeholder="t('form.companyPlaceholder')" />
               </div>
               <div>
-                <label class="block text-xs font-bold text-reddit-text-secondary uppercase mb-1">Position</label>
-                <input v-model="form.position" type="text" 
+                <label class="block text-xs font-bold text-reddit-text-secondary uppercase mb-1">{{ t('form.position') }}</label>
+                <input v-model="form.position" type="text"
                        class="w-full bg-[#272729] border border-reddit-border rounded px-3 py-2 text-reddit-text focus:outline-none focus:border-white transition-colors"
-                       placeholder="e.g. Senior Developer" />
+                       :placeholder="t('form.positionPlaceholder')" />
               </div>
            </div>
 
            <!-- Project Name & Period -->
            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label class="block text-xs font-bold text-reddit-text-secondary uppercase mb-1">Project Name</label>
-                <input v-model="form.project" type="text" 
+                <label class="block text-xs font-bold text-reddit-text-secondary uppercase mb-1">{{ t('form.projectName') }}</label>
+                <input v-model="form.project" type="text"
                        class="w-full bg-[#272729] border border-reddit-border rounded px-3 py-2 text-reddit-text focus:outline-none focus:border-white transition-colors"
-                       placeholder="e.g. SCM Dashboard System" />
+                       :placeholder="t('form.projectPlaceholder')" />
               </div>
               <div>
-                <label class="block text-xs font-bold text-reddit-text-secondary uppercase mb-1">Period</label>
-                <input v-model="form.period" type="text" 
+                <label class="block text-xs font-bold text-reddit-text-secondary uppercase mb-1">{{ t('form.period') }}</label>
+                <input v-model="form.period" type="text"
                        class="w-full bg-[#272729] border border-reddit-border rounded px-3 py-2 text-reddit-text focus:outline-none focus:border-white transition-colors"
-                       placeholder="e.g. 2023.01 ~ 2024.12" />
+                       :placeholder="t('form.periodPlaceholder')" />
               </div>
            </div>
 
            <!-- Description -->
            <div>
-             <label class="block text-xs font-bold text-reddit-text-secondary uppercase mb-1">Description</label>
+             <label class="block text-xs font-bold text-reddit-text-secondary uppercase mb-1">{{ t('form.description') }}</label>
              <textarea v-model="form.description" rows="5"
                        class="w-full bg-[#272729] border border-reddit-border rounded px-3 py-2 text-reddit-text focus:outline-none focus:border-white transition-colors resize-none"
-                       placeholder="Describe your role and achievements..."></textarea>
+                       :placeholder="t('form.descriptionPlaceholder')"></textarea>
            </div>
 
            <!-- Tech Stack -->
            <div>
-             <label class="block text-xs font-bold text-reddit-text-secondary uppercase mb-1">Tech Stack</label>
+             <label class="block text-xs font-bold text-reddit-text-secondary uppercase mb-1">{{ t('form.techStack') }}</label>
              <div class="flex items-center gap-2 mb-2">
-               <input v-model="form.newTech" type="text" 
+               <input v-model="form.newTech" type="text"
                       @keyup.enter="addTech"
                       class="flex-1 bg-[#272729] border border-reddit-border rounded px-3 py-2 text-reddit-text focus:outline-none focus:border-white transition-colors"
-                      placeholder="Add tech (Press Enter)" />
+                      :placeholder="t('form.addTech')" />
                <button @click="addTech" class="bg-[#272729] border border-reddit-border p-2 rounded text-reddit-text hover:bg-[#343536]">
                  <PlusIcon class="w-5 h-5" />
                </button>
@@ -170,14 +173,14 @@ const handleSubmit = () => {
 
         <!-- Footer -->
         <div class="p-4 border-t border-reddit-border bg-[#1A1A1B] flex justify-end gap-2">
-           <button @click="$emit('close')" 
+           <button @click="$emit('close')"
                    class="px-4 py-2 rounded-full border border-reddit-border text-reddit-text font-bold text-sm hover:bg-[#272729] transition-colors">
-             Cancel
+             {{ t('form.cancel') }}
            </button>
-           <button @click="handleSubmit" 
+           <button @click="handleSubmit"
                    class="px-4 py-2 rounded-full bg-reddit-text text-black font-bold text-sm hover:opacity-90 transition-opacity disabled:opacity-50"
                    :disabled="!form.company || !form.project">
-             {{ experience ? 'Save Changes' : 'Create' }}
+             {{ experience ? t('form.saveChanges') : t('form.create') }}
            </button>
         </div>
 

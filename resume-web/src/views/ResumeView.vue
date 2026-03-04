@@ -1,5 +1,7 @@
 <script setup>
 import { ref, computed, inject, onMounted } from 'vue'
+import { useI18n } from 'vue-i18n'
+import { useLocalized } from '../composables/useLocalized.js'
 import { resumeApi } from '../api/client.js'
 import resumeDataFallback from '../data.json'
 import ProfileHeader from '../components/ProfileHeader.vue'
@@ -8,6 +10,9 @@ import ExperienceList from '../components/ExperienceList.vue'
 import PersonalProjectList from '../components/PersonalProjectList.vue'
 import Footer from '../components/Footer.vue'
 import ExperienceFormModal from '../components/ExperienceFormModal.vue'
+
+const { t, locale } = useI18n()
+const { localized } = useLocalized()
 
 const isAuthenticated = inject('isAuthenticated')
 
@@ -142,7 +147,7 @@ const handleDownloadPDF = async () => {
   if (isAuthenticated.value) {
     pdfLoading.value = true
     try {
-      await resumeApi.downloadPDF()
+      await resumeApi.downloadPDF(locale.value)
     } catch (err) {
       console.error('Failed to download PDF:', err)
       alert('PDF 다운로드에 실패했습니다: ' + err.message)
@@ -157,7 +162,7 @@ const handleDownloadPDF = async () => {
 const handleDeleteExperience = async (experience) => {
   const expId = experience.id || experience._id
   if (!expId) return
-  if (!confirm(`"${experience.project}" 포스트를 삭제하시겠습니까?`)) return
+  if (!confirm(t('confirm.deletePost', { project: localized(experience.project) }))) return
   try {
     await resumeApi.deleteExperience(expId)
     await loadResumeData()
@@ -184,7 +189,7 @@ const handleDeleteExperience = async (experience) => {
             @focus="showTagSuggestions = searchQuery.length > 0 || !searchTag"
             @blur="onSearchBlur"
             type="text"
-            placeholder="Search Tag"
+            :placeholder="t('experience.searchTag')"
             class="bg-transparent text-sm text-reddit-text placeholder-reddit-text-secondary outline-none flex-1 min-w-0"
           />
           <button
@@ -212,7 +217,7 @@ const handleDeleteExperience = async (experience) => {
         <div v-if="searchTag" class="absolute -bottom-6 left-4 flex items-center gap-2 text-xs">
           <span class="bg-reddit-orange/20 text-reddit-orange px-2 py-0.5 rounded-full flex items-center gap-1">
             #{{ searchTag }}
-            <span class="text-reddit-text-secondary ml-1">{{ filteredExperiences.length }}건</span>
+            <span class="text-reddit-text-secondary ml-1">{{ t('experience.count', { n: filteredExperiences.length }) }}</span>
           </span>
         </div>
       </div>
@@ -232,7 +237,7 @@ const handleDeleteExperience = async (experience) => {
         @focus="showTagSuggestions = searchQuery.length > 0 || !searchTag"
         @blur="onSearchBlur"
         type="text"
-        placeholder="Search Tag"
+        :placeholder="t('experience.searchTag')"
         class="bg-transparent text-sm text-reddit-text placeholder-reddit-text-secondary outline-none flex-1 min-w-0"
       />
       <button
@@ -269,7 +274,7 @@ const handleDeleteExperience = async (experience) => {
   <div v-if="loading" class="flex items-center justify-center min-h-[60vh]">
     <div class="text-center">
       <div class="inline-block w-12 h-12 border-4 border-reddit-orange border-t-transparent rounded-full animate-spin"></div>
-      <p class="mt-4 text-reddit-text-secondary">Loading resume data...</p>
+      <p class="mt-4 text-reddit-text-secondary">{{ t('common.loading') }}</p>
     </div>
   </div>
 
@@ -279,9 +284,9 @@ const handleDeleteExperience = async (experience) => {
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-12 h-12 mx-auto text-red-500 mb-4">
         <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126ZM12 15.75h.007v.008H12v-.008Z" />
       </svg>
-      <h2 class="text-xl font-bold text-white mb-2">Failed to Load Data</h2>
+      <h2 class="text-xl font-bold text-white mb-2">{{ t('common.errorTitle') }}</h2>
       <p class="text-reddit-text-secondary mb-4">{{ error }}</p>
-      <p class="text-sm text-reddit-text-secondary">Showing fallback data from local file.</p>
+      <p class="text-sm text-reddit-text-secondary">{{ t('common.errorFallback') }}</p>
     </div>
   </div>
 
@@ -303,7 +308,7 @@ const handleDeleteExperience = async (experience) => {
               <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3" />
             </svg>
             <div v-else class="w-4 h-4 border-2 border-reddit-orange border-t-transparent rounded-full animate-spin"></div>
-            {{ pdfLoading ? 'PDF 생성 중...' : 'PDF 다운로드' }}
+            {{ pdfLoading ? t('pdf.generating') : t('pdf.download') }}
           </button>
         </div>
 
@@ -323,10 +328,10 @@ const handleDeleteExperience = async (experience) => {
 
         <div class="bg-reddit-gray border border-reddit-border rounded-md p-3 text-xs text-reddit-text-secondary">
            <div class="flex gap-2 mb-2">
-             <span>User Agreement</span>
-             <span>Privacy Policy</span>
+             <span>{{ t('common.userAgreement') }}</span>
+             <span>{{ t('common.privacyPolicy') }}</span>
            </div>
-           <p>&copy; {{ new Date().getFullYear() }} {{ data.profile.name }}. All rights reserved.</p>
+           <p>&copy; {{ new Date().getFullYear() }} {{ localized(data.profile.name) }}. All rights reserved.</p>
         </div>
       </aside>
 

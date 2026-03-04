@@ -2,7 +2,7 @@
   <div v-if="isOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75" @click.self="closeModal">
     <div class="bg-reddit-gray border border-reddit-border rounded-md p-6 w-full max-w-md mx-4">
       <div class="flex items-center justify-between mb-6">
-        <h2 class="text-2xl font-bold text-white">Log In</h2>
+        <h2 class="text-2xl font-bold text-white">{{ t('login.title') }}</h2>
         <button @click="closeModal" class="text-reddit-text-secondary hover:text-white">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
@@ -18,18 +18,18 @@
       <!-- Login Form -->
       <form @submit.prevent="handleSubmit">
         <div class="mb-4">
-          <label class="block text-reddit-text-secondary text-sm mb-2">Email</label>
+          <label class="block text-reddit-text-secondary text-sm mb-2">{{ t('login.email') }}</label>
           <input
             v-model="email"
             type="email"
             required
-            placeholder="이메일을 입력하세요"
+            :placeholder="t('login.emailPlaceholder')"
             class="w-full bg-reddit-dark border border-reddit-border rounded-md px-4 py-2 text-white focus:outline-none focus:border-reddit-orange transition-colors"
           />
         </div>
 
         <div class="mb-6">
-          <label class="block text-reddit-text-secondary text-sm mb-2">Password</label>
+          <label class="block text-reddit-text-secondary text-sm mb-2">{{ t('login.password') }}</label>
           <input
             v-model="password"
             type="password"
@@ -43,7 +43,7 @@
           type="submit"
           :disabled="loading"
           class="w-full bg-reddit-orange hover:opacity-90 text-white rounded-full px-5 py-2.5 font-bold transition-opacity disabled:opacity-50 disabled:cursor-not-allowed">
-          {{ loading ? 'Logging in...' : 'Log In' }}
+          {{ loading ? t('login.submitting') : t('login.submit') }}
         </button>
       </form>
 
@@ -53,7 +53,10 @@
 
 <script setup>
 import { ref } from 'vue'
+import { useI18n } from 'vue-i18n'
 import { authApi } from '../api/client.js'
+
+const { t } = useI18n()
 
 const props = defineProps({
   isOpen: Boolean,
