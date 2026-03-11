@@ -6,15 +6,12 @@ services:
     image: mongo:7.0
     container_name: resume-mongodb
     restart: unless-stopped
-    ports:
-      - "27017:27017"
+    network_mode: host
     environment:
       MONGO_INITDB_DATABASE: resume-db
     volumes:
       - mongodb_data:/data/db
       - mongodb_config:/data/configdb
-    networks:
-      - resume-network
     logging:
       driver: "json-file"
       options:
@@ -35,6 +32,7 @@ services:
     image: resume-backend:latest
     container_name: resume-backend
     restart: unless-stopped
+    network_mode: host
     depends_on:
       mongodb:
         condition: service_healthy
@@ -44,7 +42,7 @@ services:
     environment:
       NODE_ENV: production
       PORT: 3001
-      MONGODB_URI: mongodb://mongodb:27017/resume-db
+      MONGODB_URI: mongodb://127.0.0.1:27017/resume-db
       JWT_SECRET: ${JWT_SECRET}
       JWT_EXPIRES_IN: 7d
       FRONTEND_URL: ${FRONTEND_URL:-http://localhost}
@@ -52,8 +50,6 @@ services:
       BCRYPT_SALT_ROUNDS: 10
       ADMIN_EMAIL: ${ADMIN_EMAIL:-}
       ADMIN_PASSWORD: ${ADMIN_PASSWORD:-}
-    networks:
-      - resume-network
     logging:
       driver: "json-file"
       options:
@@ -71,12 +67,10 @@ services:
     image: nginx:alpine
     container_name: resume-nginx
     restart: unless-stopped
+    network_mode: host
     depends_on:
       backend:
         condition: service_started
-    ports:
-      - "80:80"
-      - "443:443"
     volumes:
       # Frontend static files
       - ./resume-web/dist:/var/www/html:ro
@@ -88,15 +82,13 @@ services:
       - ./certbot/www:/var/www/certbot:ro
       # Let's Encrypt certificates
       - ./certbot/conf:/etc/letsencrypt:ro
-    networks:
-      - resume-network
     logging:
       driver: "json-file"
       options:
         max-size: "10m"
         max-file: "5"
     healthcheck:
-      test: ["CMD-SHELL", "wget -q --spider http://127.0.0.1:80/health.html || exit 1"]
+      test: ["CMD-SHELL", "wget -q --spider http://127.0.0.1:3080/health.html || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 3
