@@ -98,10 +98,7 @@ const resumeSchema = new mongoose.Schema(
   }
 );
 
-/**
- * 인덱스 설정 (성능 최적화)
- */
-resumeSchema.index({ userId: 1 });
+// userId 인덱스는 unique: true 에서 자동 생성됨
 
 /**
  * JSON 응답 설정
