@@ -3,68 +3,109 @@
  * resume 데이터를 받아 완성된 HTML 문자열을 반환
  */
 export function renderResumePDF(resume) {
-  const { profile, skills, experience, education, certifications, personalProjects } = resume;
+  const {
+    profile,
+    skills,
+    experience,
+    education,
+    certifications,
+    personalProjects,
+  } = resume;
 
-  const skillsHTML = (skills || []).map(skill => `
+  const skillsHTML = (skills || [])
+    .map(
+      (skill) => `
     <div class="skill-group">
       <span class="skill-category">${escapeHtml(skill.category)}</span>
       <div class="skill-items">
-        ${(skill.items || []).map(item => `<span class="skill-tag">${escapeHtml(item)}</span>`).join('')}
+        ${(skill.items || []).map((item) => `<span class="skill-tag">${escapeHtml(item)}</span>`).join("")}
       </div>
     </div>
-  `).join('');
+  `,
+    )
+    .join("");
 
   const experienceHTML = [...(experience || [])]
     .sort((a, b) => {
       // 역순 정렬: 최신 경력이 위로
-      const periodA = a.period || '';
-      const periodB = b.period || '';
+      const periodA = a.period || "";
+      const periodB = b.period || "";
       return periodB.localeCompare(periodA);
     })
-    .map(exp => `
+    .map(
+      (exp) => `
     <div class="experience-item">
       <div class="exp-header">
         <div>
-          <h3 class="exp-project">${escapeHtml(exp.project || '')}</h3>
-          <p class="exp-company">${escapeHtml(exp.company || '')}${exp.position ? ` | ${escapeHtml(exp.position)}` : ''}</p>
+          <h3 class="exp-project">${escapeHtml(exp.project || "")}</h3>
+          <p class="exp-company">${escapeHtml(exp.company || "")}${exp.position ? ` | ${escapeHtml(exp.position)}` : ""}</p>
         </div>
-        <span class="exp-period">${escapeHtml(exp.period || '')}</span>
+        <span class="exp-period">${escapeHtml(exp.period || "")}</span>
       </div>
-      ${exp.description ? `<p class="exp-description">${escapeHtml(exp.description)}</p>` : ''}
-      ${(exp.techStack && exp.techStack.length > 0) ? `
+      ${exp.description ? `<p class="exp-description">${escapeHtml(exp.description)}</p>` : ""}
+      ${
+        exp.techStack && exp.techStack.length > 0
+          ? `
         <div class="tech-stack">
-          ${exp.techStack.map(t => `<span class="tech-tag">${escapeHtml(t)}</span>`).join('')}
+          ${exp.techStack.map((t) => `<span class="tech-tag">${escapeHtml(t)}</span>`).join("")}
         </div>
-      ` : ''}
+      `
+          : ""
+      }
     </div>
-  `).join('');
+  `,
+    )
+    .join("");
 
-  const educationHTML = (education || []).map(edu => `
+  const educationHTML = (education || [])
+    .map(
+      (edu) => `
     <div class="education-item">
       <div class="edu-header">
-        <h3>${escapeHtml(edu.school || '')}</h3>
-        <span class="edu-period">${escapeHtml(edu.period || '')}</span>
+        <h3>${escapeHtml(edu.school || "")}</h3>
+        <span class="edu-period">${escapeHtml(edu.period || "")}</span>
       </div>
-      ${edu.major ? `<p class="edu-major">${escapeHtml(edu.major)}</p>` : ''}
+      ${edu.major ? `<p class="edu-major">${escapeHtml(edu.major)}</p>` : ""}
     </div>
-  `).join('');
+  `,
+    )
+    .join("");
 
-  const projectsHTML = (personalProjects || []).map(proj => `
+  const projectsHTML = (personalProjects || [])
+    .map(
+      (proj) => `
     <div class="project-item">
       <div class="project-header">
-        <h3 class="project-name">${escapeHtml(proj.name || '')}</h3>
-        ${proj.link ? `<a class="project-link" href="${escapeHtml(proj.link)}">${escapeHtml(proj.link)}</a>` : ''}
+        <h3 class="project-name">${escapeHtml(proj.name || "")}</h3>
+        ${proj.period ? `<span class="project-period">${escapeHtml(proj.period)}</span>` : ""}
+        ${proj.link ? `<a class="project-link" href="${escapeHtml(proj.link)}">${escapeHtml(proj.link)}</a>` : ""}
+        ${proj.reviewLink ? `<a class="project-link" href="${escapeHtml(proj.reviewLink)}">${escapeHtml(proj.reviewLink)}</a>` : ""}
       </div>
-      ${proj.description ? `<p class="project-desc">${escapeHtml(proj.description)}</p>` : ''}
+      ${proj.description ? `<p class="project-desc">${escapeHtml(proj.description)}</p>` : ""}
+      ${
+        proj.techStack && proj.techStack.length > 0
+          ? `
+        <div class="tech-stack">
+          ${proj.techStack.map((t) => `<span class="tech-tag">${escapeHtml(t)}</span>`).join("")}
+        </div>
+      `
+          : ""
+      }
     </div>
-  `).join('');
+  `,
+    )
+    .join("");
 
-  const certificationsHTML = (certifications || []).map(cert => `
+  const certificationsHTML = (certifications || [])
+    .map(
+      (cert) => `
     <div class="cert-item">
-      <span class="cert-name">${escapeHtml(cert.name || '')}</span>
-      ${cert.date ? `<span class="cert-date">${escapeHtml(cert.date)}</span>` : ''}
+      <span class="cert-name">${escapeHtml(cert.name || "")}</span>
+      ${cert.date ? `<span class="cert-date">${escapeHtml(cert.date)}</span>` : ""}
     </div>
-  `).join('');
+  `,
+    )
+    .join("");
 
   return `<!DOCTYPE html>
 <html lang="ko">
@@ -306,74 +347,105 @@ export function renderResumePDF(resume) {
       text-decoration: none;
     }
 
+    .project-period {
+      font-size: 8.5pt;
+      color: #888;
+      white-space: nowrap;
+    }
+
     .project-desc {
       font-size: 9pt;
       color: #666;
       margin-top: 2px;
+      white-space: pre-line;
     }
   </style>
 </head>
 <body>
   <div class="container">
     <div class="header">
-      <h1>${escapeHtml(profile.name || '')}</h1>
-      <div class="role">${escapeHtml(profile.role || '')}</div>
+      <h1>${escapeHtml(profile.name || "")}</h1>
+      <div class="role">${escapeHtml(profile.role || "")}</div>
       <div class="contact-info">
-        ${profile.email ? `<span>${escapeHtml(profile.email)}</span>` : ''}
-        ${profile.phone ? `<span>${escapeHtml(profile.phone)}</span>` : ''}
-        ${profile.address ? `<span>${escapeHtml(profile.address)}</span>` : ''}
+        ${profile.email ? `<span>${escapeHtml(profile.email)}</span>` : ""}
+        ${profile.phone ? `<span>${escapeHtml(profile.phone)}</span>` : ""}
+        ${profile.address ? `<span>${escapeHtml(profile.address)}</span>` : ""}
       </div>
     </div>
 
-    ${profile.summary ? `
+    ${
+      profile.summary
+        ? `
     <div class="summary">${escapeHtml(profile.summary)}</div>
-    ` : ''}
+    `
+        : ""
+    }
 
-    ${skillsHTML ? `
+    ${
+      skillsHTML
+        ? `
     <div class="section">
       <h2 class="section-title">Skills</h2>
       ${skillsHTML}
     </div>
-    ` : ''}
+    `
+        : ""
+    }
 
-    ${experienceHTML ? `
+    ${
+      experienceHTML
+        ? `
     <div class="section">
       <h2 class="section-title">Experience</h2>
       ${experienceHTML}
     </div>
-    ` : ''}
+    `
+        : ""
+    }
 
-    ${educationHTML ? `
+    ${
+      educationHTML
+        ? `
     <div class="section">
       <h2 class="section-title">Education</h2>
       ${educationHTML}
     </div>
-    ` : ''}
+    `
+        : ""
+    }
 
-    ${certificationsHTML ? `
+    ${
+      certificationsHTML
+        ? `
     <div class="section">
       <h2 class="section-title">Certifications</h2>
       ${certificationsHTML}
     </div>
-    ` : ''}
+    `
+        : ""
+    }
 
-    ${projectsHTML ? `
+    ${
+      projectsHTML
+        ? `
     <div class="section">
       <h2 class="section-title">Personal Projects</h2>
       ${projectsHTML}
     </div>
-    ` : ''}
+    `
+        : ""
+    }
   </div>
 </body>
 </html>`;
 }
 
 function escapeHtml(str) {
-  if (!str) return '';
+  if (!str) return "";
   return String(str)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;')
-    .replace(/'/g, '&#039;');
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
 }
