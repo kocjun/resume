@@ -144,3 +144,8 @@ temp/
 *.pid
 *.seed
 *.pid.lock
+
+# --------------------------
+# Job application materials (개인 지원 서류 — public repo 비공개 유지)
+# --------------------------
+docs/job-application/
