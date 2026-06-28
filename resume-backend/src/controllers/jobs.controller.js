@@ -7,9 +7,15 @@ import { dirname, join } from 'path';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
-const resumeDataFallback = JSON.parse(
-  readFileSync(join(__dirname, '../../../resume-web/src/data.json'), 'utf-8')
-);
+
+let resumeDataFallback = null;
+try {
+  resumeDataFallback = JSON.parse(
+    readFileSync(join(__dirname, '../../../resume-web/src/data.json'), 'utf-8')
+  );
+} catch {
+  // data.json이 없거나 읽을 수 없는 경우 무시
+}
 
 /**
  * 채용 정보 검색
@@ -21,18 +27,16 @@ export async function searchJobs(request, reply) {
 
     // 인증된 사용자: DB에서 이력서 조회
     if (request.user?.userId) {
-      const userId = request.user.userId;
-      if (userId === 'env-admin') {
-        // env-admin은 첫 번째 이력서 사용
-        resumeData = await Resume.findOne().lean();
-      } else {
-        resumeData = await Resume.findOne({ userId }).lean();
-      }
+      resumeData = await Resume.findOne({ userId: request.user.userId }).lean();
     }
 
     // 이력서가 없으면 fallback 데이터 사용
     if (!resumeData) {
       resumeData = resumeDataFallback;
+    }
+
+    if (!resumeData) {
+      return reply.code(400).send({ error: '이력서를 먼저 등록해주세요' });
     }
 
     // 이력서 분석
