@@ -144,6 +144,3 @@ temp/
 *.pid
 *.seed
 *.pid.lock
-
-# Generated application PDFs (재생성 가능)
-docs/job-application/*.pdf
