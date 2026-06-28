@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: "Apple SD Gothic Neo", sans-serif; background: #fff; }
+  #diagram {
+    width: 1100px; padding: 36px 40px; background: #ffffff; color: #1a1a1b;
+  }
+  .title { font-size: 26px; font-weight: 800; color: #191919; }
+  .title .accent { color: #FF4500; }
+  .subtitle { font-size: 13px; color: #777; margin-top: 4px; margin-bottom: 22px; }
+
+  .layer { border-radius: 12px; padding: 14px 18px; margin-bottom: 14px; position: relative; }
+  .layer-label { font-size: 11px; font-weight: 700; letter-spacing: .5px; text-transform: uppercase; color: #999; margin-bottom: 8px; }
+
+  .l-client { background: #f6f7f8; border: 1.5px solid #e2e2e2; }
+  .l-front  { background: #eef6ff; border: 1.5px solid #cfe3ff; }
+  .l-back   { background: #fff5f0; border: 2px solid #FF4500; }
+  .l-infra  { background: #f3f1ef; border: 1.5px dashed #c9c2bb; }
+
+  .row { display: flex; gap: 12px; align-items: stretch; }
+  .box {
+    background: #fff; border: 1.5px solid #d9d9d9; border-radius: 9px;
+    padding: 11px 13px; flex: 1;
+  }
+  .box h4 { font-size: 14px; color: #191919; margin-bottom: 3px; }
+  .box p { font-size: 11.5px; color: #666; line-height: 1.45; }
+  .tag { display:inline-block; background:#272729; color:#fff; font-size:10px; font-weight:600;
+         padding:1.5px 7px; border-radius:999px; margin:3px 4px 0 0; }
+  .tag.blue { background:#0a66c2; }
+  .tag.orange { background:#FF4500; }
+
+  .arrow-down { text-align:center; color:#FF4500; font-size:18px; font-weight:800; margin:-8px 0 6px; }
+  .flow-title { font-size:12px; font-weight:800; color:#FF4500; margin-bottom:8px; }
+  .pill-flow { display:flex; align-items:center; flex-wrap:wrap; gap:6px; font-size:11.5px; }
+  .pill { background:#fff; border:1.4px solid #FF4500; color:#c93b00; border-radius:999px; padding:4px 10px; font-weight:600; }
+  .pill.solid { background:#FF4500; color:#fff; }
+  .pill.gray { border-color:#bbb; color:#555; background:#fafafa; }
+  .sep { color:#FF4500; font-weight:800; }
+
+  .llm-rank { display:flex; align-items:center; gap:8px; padding:6px 0; }
+  .rank-num { width:20px; height:20px; border-radius:50%; background:#FF4500; color:#fff; font-size:11px; font-weight:800;
+              display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+  .rank-num.g2 { background:#ff7a45; } .rank-num.g3 { background:#ffa179; }
+  .llm-rank span.name { font-size:12.5px; font-weight:700; color:#222; }
+  .llm-rank span.meta { font-size:11px; color:#777; }
+  .fallback-note { font-size:10.5px; color:#999; margin-top:4px; }
+
+  .twocol { display:flex; gap:14px; }
+  .twocol > div { flex:1; }
+  .footer-note { font-size:11px; color:#888; margin-top:6px; }
+</style></head>
+<body>
+<div id="diagram">
+  <div class="title">별빛국회 <span class="accent">RAG 아키텍처</span></div>
+  <div class="subtitle">Starlight Assembly · AI 정치 정보 플랫폼 · https://starlightassembly.kr (운영 중)</div>
+
+  <!-- Client -->
+  <div class="layer l-client">
+    <div class="layer-label">Client</div>
+    <div class="row">
+      <div class="box">
+        <h4>👤 사용자 (브라우저)</h4>
+        <p>법안·의원·회의록 자연어 질의응답 · 법안 감시탑 · 데일리 브리핑</p>
+      </div>
+    </div>
+  </div>
+  <div class="arrow-down">▼ &nbsp; HTTPS · Cloudflare (CDN / DNS / SSL)</div>
+
+  <!-- Frontend -->
+  <div class="layer l-front">
+    <div class="layer-label">Frontend — democracy-web</div>
+    <div class="box" style="border-color:#cfe3ff;">
+      <h4>Vue 3 SPA</h4>
+      <p>사용자 인터페이스 · 챗봇 UI · 법안/의원 탐색</p>
+      <span class="tag blue">Vue 3</span><span class="tag blue">TypeScript</span>
+      <span class="tag blue">Tailwind CSS</span><span class="tag blue">Playwright E2E</span>
+    </div>
+  </div>
+  <div class="arrow-down">▼ &nbsp; REST API</div>
+
+  <!-- Backend -->
+  <div class="layer l-back">
+    <div class="layer-label" style="color:#FF4500;">Backend — politics-rag-router · Spring Boot 3.3 + LangChain4j</div>
+    <div class="twocol">
+      <div class="box">
+        <div class="flow-title">① 질의(Query) 흐름</div>
+        <div class="pill-flow">
+          <span class="pill">질문</span><span class="sep">→</span>
+          <span class="pill">임베딩</span><span class="sep">→</span>
+          <span class="pill">벡터 검색</span><span class="sep">→</span>
+          <span class="pill">컨텍스트 합성</span><span class="sep">→</span>
+          <span class="pill solid">LLM 생성</span><span class="sep">→</span>
+          <span class="pill">응답</span>
+        </div>
+      </div>
+      <div class="box">
+        <div class="flow-title">② 적재(Ingestion) 흐름</div>
+        <div class="pill-flow">
+          <span class="pill gray">국회 데이터<br>(법안·회의록)</span><span class="sep">→</span>
+          <span class="pill gray">청킹</span><span class="sep">→</span>
+          <span class="pill gray">bge-m3 임베딩</span><span class="sep">→</span>
+          <span class="pill gray">pgvector 저장</span>
+        </div>
+        <div class="footer-note">스케줄링 + 스로틀링 잡 (법안 1,213건 적재)</div>
+      </div>
+    </div>
+  </div>
+  <div class="arrow-down">▼</div>
+
+  <!-- Data + LLM layer -->
+  <div class="row" style="margin-bottom:14px;">
+    <div class="box" style="flex:0.8;">
+      <h4>⚡ Redis 7</h4>
+      <p>검색·응답 캐시<br>지연·비용 절감</p>
+    </div>
+    <div class="box" style="flex:1.1;">
+      <h4>🗄 PostgreSQL 16 + pgvector</h4>
+      <p>문서·메타데이터 + 벡터 인덱스</p>
+      <span class="tag">bge-m3 · 1024차원</span><span class="tag">Flyway 마이그레이션</span>
+    </div>
+    <div class="box" style="flex:1.5; border-color:#FF4500;">
+      <h4>🧠 LLM 라우터 — 3단계 폴백</h4>
+      <div class="llm-rank"><span class="rank-num">1</span><span class="name">gemma</span><span class="meta">· oMLX (Mac Studio, 로컬·무비용)</span></div>
+      <div class="llm-rank"><span class="rank-num g2">2</span><span class="name">qwen3:32b</span><span class="meta">· Ollama (로컬 대안)</span></div>
+      <div class="llm-rank"><span class="rank-num g3">3</span><span class="name">llama-3.3-70b</span><span class="meta">· Groq API (클라우드 폴백)</span></div>
+      <div class="fallback-note">로컬 우선 → 장애 시 클라우드 폴백 (비용·지연·가용성 균형)</div>
+    </div>
+  </div>
+
+  <!-- Infra -->
+  <div class="layer l-infra">
+    <div class="layer-label">Infrastructure &amp; Ops</div>
+    <div class="row">
+      <div class="box" style="background:#faf9f8;"><h4>☁ Vultr (Ubuntu 24.04)</h4><p>백엔드 호스팅</p></div>
+      <div class="box" style="background:#faf9f8;"><h4>🔌 Mac Studio + Cloudflare Tunnel</h4><p>로컬 LLM 서버 안전 노출</p></div>
+      <div class="box" style="background:#faf9f8;"><h4>🐳 Docker</h4><p>컨테이너 운영</p></div>
+      <div class="box" style="background:#faf9f8;"><h4>📊 Prometheus + Grafana</h4><p>모니터링 · 백업/디스크 알림</p></div>
+    </div>
+  </div>
+
+  <div class="footer-note" style="margin-top:14px; text-align:right; color:#aaa;">
+    설계·개발·운영 단독 수행 · Claude Code 멀티에이전트 오케스트레이션 기반 개발
+  </div>
+</div>
+</body></html>
