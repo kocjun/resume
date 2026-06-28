@@ -285,19 +285,55 @@
     ],
     "personalProjects": [
         {
+            "name": "별빛국회 (Starlight Assembly)",
+            "period": "2026.02 ~ 진행 중",
+            "featured": true,
+            "link": "https://starlightassembly.kr/",
+            "reviewLink": "https://starlightassembly.kr/review/",
+            "description": "AI 기반 정치 정보 플랫폼 (직접 기획·개발·운영 중). 국회 법안·의원·회의록을 자연어로 질의응답하는 RAG 챗봇과 법안 감시·데일리 브리핑 서비스를 제공합니다.\n- LangChain4j 기반 RAG 파이프라인 구축: bge-m3 임베딩 + PostgreSQL/pgvector 벡터 검색, oMLX·Ollama·Groq 3단계 LLM 폴백 라우팅 설계\n- Spring Boot 3.3 백엔드 + Vue 3/TypeScript/Tailwind CSS 프론트엔드 풀스택 단독 개발\n- Vultr(Ubuntu)·Cloudflare Tunnel·Docker·Prometheus/Grafana로 직접 배포 및 운영\n- Claude Code 멀티 에이전트 오케스트레이션으로 설계·개발·테스트 전 과정 수행",
+            "techStack": [
+                "Java 17",
+                "Spring Boot",
+                "LangChain4j",
+                "RAG",
+                "pgvector",
+                "Redis",
+                "Vue 3",
+                "TypeScript",
+                "Tailwind CSS",
+                "Docker",
+                "Cloudflare",
+                "Claude Code"
+            ]
+        },
+        {
             "name": "Resume",
             "description": "Vue 3 + Tailwind CSS + Fastify + MongoDB 기반 개인 이력서 웹 애플리케이션. Reddit 스타일 UI/UX.",
-            "link": "https://github.com/kocjun/resume"
+            "link": "https://github.com/kocjun/resume",
+            "techStack": [
+                "Vue 3",
+                "Tailwind CSS",
+                "Fastify",
+                "MongoDB"
+            ]
         },
         {
             "name": "AI Stock",
             "description": "Python 기반 AI 주식 분석 프로젝트.",
-            "link": "https://github.com/kocjun/ai-stock"
+            "link": "https://github.com/kocjun/ai-stock",
+            "techStack": [
+                "Python"
+            ]
         },
         {
             "name": "Learn Kafka",
             "description": "Kafka, 이벤트 기반 MSA 백엔드, Docker 등 학습용 프로젝트.",
-            "link": "https://github.com/kocjun/learn-kafka"
+            "link": "https://github.com/kocjun/learn-kafka",
+            "techStack": [
+                "Kafka",
+                "Docker",
+                "MSA"
+            ]
         }
     ]
 }
