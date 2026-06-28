@@ -5,7 +5,7 @@
         "email": "Yeongchang.jeon@gmail.com",
         "phone": "010-8838-2248",
         "address": "경기도 화성시",
-        "summary": "15년 이상 Java/Spring 기반 엔터프라이즈 시스템의 설계·개발·운영을 담당해 온 시니어 풀스택 개발자입니다. 삼성전자, 세메스, 질병관리청 등 대규모 사용자 대상 미션 크리티컬 시스템을 다수 구축하며, 아키텍처 설계부터 성능 최적화까지 전 과정을 리드했습니다.\n\n최근에는 탄탄한 백엔드 역량을 AI 영역으로 확장하여, LangChain4j 기반 RAG 챗봇과 멀티 LLM 폴백 라우팅을 갖춘 AI 정치 정보 플랫폼 '별빛국회'를 직접 설계·개발하고 실서비스로 운영하고 있습니다. Spring Boot·Vue 3 풀스택 개발부터 pgvector 벡터 검색, Docker·Cloudflare 인프라 운영, Claude Code 기반 에이전트 오케스트레이션까지 — AX(AI 전환)의 전 과정을 직접 다룹니다."
+        "summary": "15년 이상 Java/Spring 기반 엔터프라이즈 시스템의 설계·개발·운영을 담당해 온 시니어 풀스택 개발자입니다. 삼성전자, 세메스, 질병관리청 등 대규모 사용자 대상 미션 크리티컬 시스템을 다수 구축하며, 아키텍처 설계부터 성능 최적화까지 전 과정을 리드했습니다.\n\n최근에는 백엔드 역량을 AI 영역으로 확장해, LangChain4j 기반 RAG 챗봇과 멀티 LLM 폴백 라우팅을 적용한 정치 정보 플랫폼 '별빛국회'를 직접 설계·개발하고 실서비스로 운영하고 있습니다. Spring Boot·Vue 3 풀스택 개발, pgvector 벡터 검색, Docker·Cloudflare 인프라 운영, Claude Code 기반 에이전트 개발을 직접 수행합니다."
     },
     "skills": [
         {
@@ -290,7 +290,7 @@
             "featured": true,
             "link": "https://starlightassembly.kr/",
             "reviewLink": "https://starlightassembly.kr/review/",
-            "description": "AI 기반 정치 정보 플랫폼 (직접 기획·개발·운영 중). 국회 법안·의원·회의록을 자연어로 질의응답하는 RAG 챗봇과 법안 감시·데일리 브리핑 서비스를 제공합니다.\n- LangChain4j 기반 RAG 파이프라인 구축: bge-m3 임베딩 + PostgreSQL/pgvector 벡터 검색, oMLX·Ollama·Groq 3단계 LLM 폴백 라우팅 설계\n- Spring Boot 3.3 백엔드 + Vue 3/TypeScript/Tailwind CSS 프론트엔드 풀스택 단독 개발\n- Vultr(Ubuntu)·Cloudflare Tunnel·Docker·Prometheus/Grafana로 직접 배포 및 운영\n- Claude Code 멀티 에이전트 오케스트레이션으로 설계·개발·테스트 전 과정 수행",
+            "description": "국회 법안·의원·회의록을 자연어로 질의응답하는 RAG 챗봇과 법안 감시, 데일리 브리핑을 제공하는 AI 정치 정보 플랫폼입니다. 직접 기획·개발하고 실서비스로 운영하고 있습니다.\n- LangChain4j 기반 RAG 파이프라인 구축 (bge-m3 임베딩, PostgreSQL/pgvector 벡터 검색)\n- oMLX, Ollama, Groq를 활용한 3단계 LLM 폴백 라우팅 설계\n- Spring Boot 3.3 백엔드와 Vue 3/TypeScript/Tailwind 프론트엔드 단독 개발\n- Vultr, Cloudflare Tunnel, Docker, Prometheus/Grafana 기반 배포 및 운영\n- Claude Code를 활용한 설계·개발·테스트",
             "techStack": [
                 "Java 17",
                 "Spring Boot",
